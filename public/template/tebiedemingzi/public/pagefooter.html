@@ -1,0 +1,151 @@
+<script src="__JS__/utils.js"></script>
+<!-- 新订单提示信息 -->
+
+<script language="JavaScript">
+document.onmousemove=function(e)
+{
+  var obj = Utils.srcElement(e);
+  if (typeof(obj.onclick) == 'function' && obj.onclick.toString().indexOf('listTable.edit') != -1)
+  {
+    obj.title = '{$lang.span_edit_help}';
+    obj.style.cssText = 'background: #bbb;';
+    obj.onmouseout = function(e)
+    {
+      this.style.cssText = '';
+    }
+  }
+  else if (typeof(obj.href) != 'undefined' && obj.href.indexOf('listTable.sort') != -1)
+  {
+    obj.title = '{$lang.href_sort_help}';
+  }
+}
+<!--
+{if empty($enable_order_check)}
+startCheckOrder = function(){}
+{/if}
+{literal}
+
+var MyTodolist;
+function showTodoList(adminid)
+{
+  if(!MyTodolist)
+  {
+    var global = $import("__JS__/global.js","js");
+    global.onload = global.onreadystatechange= function()
+    {
+      if(this.readyState && this.readyState=="loading")return;
+      var md5 = $import("__JS__/md5.js","js");
+      md5.onload = md5.onreadystatechange= function()
+      {
+        if(this.readyState && this.readyState=="loading")return;
+        var todolist = $import("__JS__/todolist.js","js");
+        todolist.onload = todolist.onreadystatechange = function()
+        {
+          if(this.readyState && this.readyState=="loading")return;
+          MyTodolist = new Todolist();
+          MyTodolist.show();
+        }
+      }
+    }
+  }
+  else
+  {
+    if(MyTodolist.visibility)
+    {
+      MyTodolist.hide();
+    }
+    else
+    {
+      MyTodolist.show();
+    }
+  }
+}
+
+if (Browser.isIE)
+{
+  onscroll = function()
+  {
+    //document.getElementById('calculator').style.top = document.body.scrollTop;
+    document.getElementById('popMsg').style.top = (document.body.scrollTop + document.body.clientHeight - document.getElementById('popMsg').offsetHeight) + "px";
+  }
+}
+
+if (document.getElementById("listDiv"))
+{
+  document.getElementById("listDiv").onmouseover = function(e)
+  {
+    obj = Utils.srcElement(e);
+
+    if (obj)
+    {
+      if (obj.parentNode.tagName.toLowerCase() == "tr") row = obj.parentNode;
+      else if (obj.parentNode.parentNode.tagName.toLowerCase() == "tr") row = obj.parentNode.parentNode;
+      else return;
+
+      for (i = 0; i < row.cells.length; i++)
+      {
+        if (row.cells[i].tagName != "TH") row.cells[i].style.backgroundColor = '#F4FAFB';
+      }
+    }
+
+  }
+
+  document.getElementById("listDiv").onmouseout = function(e)
+  {
+    obj = Utils.srcElement(e);
+
+    if (obj)
+    {
+      if (obj.parentNode.tagName.toLowerCase() == "tr") row = obj.parentNode;
+      else if (obj.parentNode.parentNode.tagName.toLowerCase() == "tr") row = obj.parentNode.parentNode;
+      else return;
+
+      for (i = 0; i < row.cells.length; i++)
+      {
+          if (row.cells[i].tagName != "TH") row.cells[i].style.backgroundColor = '#FFF';
+      }
+    }
+  }
+
+  document.getElementById("listDiv").onclick = function(e)
+  {
+    var obj = Utils.srcElement(e);
+
+    if (obj.tagName == "INPUT" && obj.type == "checkbox")
+    {
+      if (!document.forms['listForm'])
+      {
+        return;
+      }
+      var nodes = document.forms['listForm'].elements;
+      var checked = false;
+
+      for (i = 0; i < nodes.length; i++)
+      {
+        if (nodes[i].checked)
+        {
+           checked = true;
+           break;
+         }
+      }
+
+      if(document.getElementById("btnSubmit"))
+      {
+        document.getElementById("btnSubmit").disabled = !checked;
+      }
+      for (i = 1; i <= 10; i++)
+      {
+        if (document.getElementById("btnSubmit" + i))
+        {
+          document.getElementById("btnSubmit" + i).disabled = !checked;
+        }
+      }
+    }
+  }
+
+}
+{/literal}
+//-->
+</script>
+</body>
+</html>

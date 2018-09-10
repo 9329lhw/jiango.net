@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' name="theForm" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$action.action_id}' />
+                <input type='hidden' name='pid' value='{$action.parent_id}' />
+                <tr><td class="label">
+                        权限名称</td><td><input type='text' name='name' value='{$action.action_name}' /></td>
+                </tr>
+                <tr><td class="label">
+                        权限标识
+                        </td><td><input type='text' name='code' id="code" value='{$action.action_code}' /></td>
+                </tr>
+                <tr><td class="label">
+                        链接
+                        </td><td><input type='text' name='link' value='{$action.action_link}'></td>
+                </tr>
+                <tr><td class="label">
+                        生成菜单
+                        </td><td>
+                        {if $action.is_show eq '1'}
+                        <input type='checkbox' name='show' value='1' checked="checked" />
+                        {else}
+                        <input type='checkbox' name='show' value='1' />
+                        {/if}</td>
+                </tr>
+                <tr><td class="label">
+                        排序
+                    </td>
+                    <td><input type='text' name='sort' value='{$action.sort}'></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/utils.js"></script>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+            function validate()
+            {
+                validator = new Validator("theForm");
+                validator.required("name",'请填写权限名称');
+                validator.required("code",'请填写权限标识');
+
+                if(validator.passed()){
+                    var code = true;
+                    $.ajax({
+                        async:false,
+                        type:'POST',
+                        url:"/admin/permission/checkCode",
+                        data:{
+                                  id:$('#id').val(),
+                                  code:$('#code').val()
+                                },
+                        success: function(msg,txt,xml){
+                            code = msg;
+                            if(!msg){
+                                alert('权限标识已存在');
+                            }
+                        }
+                    });
+                    return code;
+                }else{
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>

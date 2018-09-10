@@ -1,0 +1,40 @@
+{include file="../public/pageheader.html"}
+<script src="__JS__/utils.js"></script>
+<script src="__JS__/listtable.js"></script>
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>奖期日期</th>
+                <th>开奖日期</th>
+                <th>佣金额</th>
+                <th>奖池</th>
+                <th>最终奖池</th>
+                <th>中奖标识</th>
+                <th>中奖人数</th>
+                <th>直接中奖数</th>
+                <th>上级中奖数</th>
+                <th>上上级中奖数</th>
+                <th>最终中奖数</th>
+                <th>操作</th>
+            <tr>
+                {foreach from=$list item=item}
+            <tr>
+                <td align="center">{$item.prize_day}</td>
+                <td align="center">{$item.publish_day}</td>
+                <td align="center">{$item.income_amount}</td>
+                <td align="center">{$item.actual_jackpot}</td>
+                <td align="center">{$item.jackpot}</td>
+                <td align="center">{$item.winning_data}</td>
+                <td align="center">{$item.actual_winning_num}</td>
+                <td align="center">{$item.order_winning_num}</td>
+                <td align="center">{$item.second_agent_num}</td>
+                <td align="center">{$item.first_agent_num}</td>
+                <td align="center">{$item.winning_num}</td>
+                <td align="center"><a href="/admin/prize/winners?day={$item.prize_day}">获奖名单</a></td>
+            </tr>
+            {foreachelse}
+            <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+            {/foreach}
+        </table>
+    </div>
+{include file="../public/pagefooter.html"}

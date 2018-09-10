@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' enctype="multipart/form-data" name="theForm" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$keywordinfo.id}' />
+                <tr><td class="label">keyword</td>
+                    <td><input type='text' name='keyword' id="code" value='{$keywordinfo.keyword}' /></td>
+                </tr>
+                <tr><td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' name='status' value='1' {if $keywordinfo.status eq 1}checked="true"{/if}/>是
+                               <input type='radio' name='status' value='0' {if $keywordinfo.status eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr><td class="label">是否推荐</td>
+                    <td>
+                        <input type='radio' name='recommend' value='1' {if $keywordinfo.recommend eq 1}checked="true"{/if}/>是
+                               <input type='radio' name='recommend' value='0' {if $keywordinfo.recommend eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr><td class="label">
+                        排序
+                    </td>
+                    <td><input type='text' name='ordid' value='{$keywordinfo.ordid}'></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+                            function validate()
+                            {
+                                validator = new Validator("theForm");
+                                validator.required("keyword", 'keyword不能为空');
+                                if (validator.passed()) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+        </script>
+    </body>
+</html>

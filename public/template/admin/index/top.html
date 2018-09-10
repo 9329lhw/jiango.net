@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>{$lang.cp_home}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link href="__CSS__/general.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="__CSS__/main.css" rel="stylesheet" type="text/css">
+            <style type="text/css">
+                body{
+                    padding: 0;
+                }
+                #header-frame{
+                    height: 80px;
+                }
+                #header-div {
+                    height: 70px;
+                    background: #41a5e1;
+                }
+
+                #logo-div {
+                    float: left;
+                    padding-top:10px;
+                }
+
+                #license-div {
+                    height: 70px;
+                    float: left;
+                    text-align:center;
+                    vertical-align:middle;
+                    line-height:50px;
+                }
+
+                #license-div a:visited, #license-div a:link {
+                    color: #EB8A3D;
+                }
+
+                #license-div a:hover {
+                    text-decoration: none;
+                    color: #EB8A3D;
+                }
+
+                #submenu-div {
+                    padding-top: 8px;
+                }
+
+                #submenu-div ul {
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
+                }
+
+                #submenu-div li {
+                    float: right;
+                    padding: 0 10px;
+                    margin: 3px 0;
+                    border-left: 1px solid #FFF;
+                }
+
+                #submenu-div a:visited, #submenu-div a:link {
+                    color: #FFF;
+                    text-decoration: none;
+                }
+
+                #submenu-div a:hover {
+                    color: #F5C29A;
+                }
+
+                #loading-div {
+                    clear: right;
+                    text-align: right;
+                    display: block;
+                }
+
+                #menu-div {
+                    background: #f5f5f5;
+                    font-weight: bold;
+                    height: 49px;
+                    line-height:49px;
+                    border-bottom:1px solid #e8e8e8;
+                }
+
+                #menu-div ul {
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
+                }
+
+                #menu-div li {
+                    float: left;
+                }
+
+                #menu-div a:visited, #menu-div a:link {
+                    display:block;
+                    padding: 0 20px;
+                    text-decoration: none;
+                    color: #3a3a3a;
+                }
+
+                #menu-div a:hover {
+                    color: #000;
+                }
+
+                #menu-div li.fix-spacel{ width:30px; border-left:none; }
+                #menu-div li.fix-spacer{ border-right:none; }
+            </style>
+            <script src="__JS__/transport.js"></script>
+            <script type="text/javascript">
+
+                function modalDialog(url, name, width, height)
+                {
+                    if (width == undefined)
+                    {
+                        width = 400;
+                    }
+                    if (height == undefined)
+                    {
+                        height = 300;
+                    }
+
+                    if (window.showModalDialog)
+                    {
+                        window.showModalDialog(url, name, 'dialogWidth=' + (width) + 'px; dialogHeight=' + (height + 5) + 'px; status=off');
+                    } else
+                    {
+                        x = (window.screen.width - width) / 2;
+                        y = (window.screen.height - height) / 2;
+
+                        window.open(url, name, 'height=' + height + ', width=' + width + ', left=' + x + ', top=' + y + ', toolbar=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, modal=yes');
+                    }
+                }
+
+                function ShowToDoList()
+                {
+                    try
+                    {
+                        var mainFrame = window.top.frames['main-frame'];
+                        mainFrame.window.showTodoList(adminId);
+                    } catch (ex)
+                    {
+                    }
+                }
+
+                    var adminId = "{$admin_id}";
+            </script>
+    </head>
+    <body>
+        <div id="header-div">
+            <div id="logo-div" style="bgcolor:#000000;"><img src="__IMG__/ecshop_logo.gif" alt="商城 - power for e-commerce" /></div>
+            <div id="license-div" style="bgcolor:#000000;"></div>
+            <div id="submenu-div">
+                <ul>
+                    <li class="personal-set" onmouseover="showBar(this);" onmouseleave="hideBar(this);">
+                        <a href="privilege.php?act=modif" target="main-frame">{$lang.profile}</a>
+                        <div class="panel-hint">
+                            <ul>
+                                <li class="btn-first">
+                                    <a href="{url('admin/index/navigation')}" target="main-frame">个人中心</a>
+                                </li>
+                                <li class="btn-exit">
+                                    <a href="privilege.php?act=logout" target="_top" class="fix-submenu">{$lang.signout}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li style="border-left:none;"><a href="javascript:window.top.frames['main-frame'].document.location.reload();">{$lang.refresh}</a></li>
+                </ul>
+                <div id="load-div" style="padding: 5px 10px 0 0; text-align: right; color: #FF9900; display: none;width:40%;float:right;"><img src="__IMG__/top_loader.gif" width="16" height="16" alt="{$lang.loading}" style="vertical-align: middle" /> {$lang.loading}</div>
+            </div>
+        </div>
+        <div id="menu-div">
+            <ul>
+                <li class="fix-spacel">&nbsp;</li>
+                <li><a href="main" target="main-frame">{$lang.admin_home}</a></li>
+                <li><a href="navigation" target="main-frame">{$lang.set_navigator}</a></li>
+                {foreach from=$nav_list item=item key=key}
+                <li><a href="{$item.action_link}" target="main-frame">{$item.action_name}</a></li>
+                {/foreach}
+            </ul>
+            <br class="clear" />
+        </div>
+
+        <script>
+                function showBar(item) {
+                    var silb = item.lastElementChild;
+                    silb.style.display = "block";
+                }
+                function hideBar(item) {
+                    var silb = item.lastElementChild;
+                    silb.style.display = "none";
+                }
+
+        </script>
+    </body>
+</html>

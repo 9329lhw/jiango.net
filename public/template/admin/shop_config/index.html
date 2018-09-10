@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action="/admin/shop_config/save" method='post' name="theForm" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                {foreach from=$configs item=item}
+                <tr>
+                    <td class="label">
+                        {$item.title}
+                    </td>
+                    <td>
+                        <input type='hidden' name='code[]' value='{$item.code}'>
+                        <input type='text' name='value[]' value='{$item.value}'>
+                    </td>
+                </tr>
+                {/foreach}
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/utils.js"></script>
+    </body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <meta name="Keywords" content="{$keywords}" />
+        <meta name="Description" content="{$description}" />
+        <title>{$page_title}</title>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link href="{$CSS}/haohaios.css" rel="stylesheet" />
+        <script src="{$JS}/lib/jquery.min.js"></script>
+        <script src="{$JS}/lib/haohaios.js"></script>
+        <script type='text/javascript' src='{$smarty.const.ADMIN_JS}/region.js'></script>
+        <script type='text/javascript' src='{$smarty.const.ADMIN_JS}/utils.js'></script>
+    </head>
+    <body>
+        <!-- 开始收货人信息填写界面 -->
+        <script type="text/javascript">
+            region.isAdmin = false;
+            {foreach from = $lang.flow_js item = item key = key}
+            var {$key} = "{$item}";
+            {/foreach}
+
+            {literal}
+            onload = function() {
+            if (!document.all)
+            {
+            document.forms['theForm'].reset();
+            }
+            }
+            {/literal}
+        </script>
+        <!-- 如果有收货地址，循环显示用户的收获地址 -->
+
+        <form action="/Home/Charge/saveAddress" method="post" name="theForm" id="theForm">
+            <input name="goods_id" type="hidden" value="{$goods_id}"/>
+            <div class="mod_container">
+                <div class="wx_bar">
+                    <div class="wx_bar_back">
+                        <a id="back" href="javascript:void(0);"></a>
+                    </div>
+                    <div class="wx_bar_tit">收货地址</div>
+                </div>
+                <div class="wx_wrap">
+                    <div class="address_new">
+                        <input id="address_regionId" value="" type="hidden">
+                        <input id="adid" value="" type="hidden">
+                        <p>
+                            <label for="name"><span class="tit">收货人</span>
+                                <input name="consignee" type="text" class="inputBg" id="consignee_{$sn}" value="{$consignee.consignee|escape}" placeholder="姓名"/>
+                                <span id="updateTip1" style="color: red; display: none;">请填写姓名</span>
+                            </label> 
+                        </p>
+                        <p>
+                            <label for="mobile"><span class="tit">电话</span>
+                                <input name="mobile" type="text" class="inputBg"  id="mobile_{$sn}" value="{$consignee.mobile|escape}" placeholder="电话"/>
+                                <span id="updateTip2" style="color: red; display: none;">请填写正确的电话</span>
+                            </label>
+                        </p>
+                        {if 0}
+                        <p>
+                            <label for="provinceId"><span class="tit">国家</span>
+                                <select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')" >
+                                    <option value="0">{$lang.please_select}{$name_of_region[0]}</option>
+                                    <!-- {foreach from=$country_list item=country} -->
+                                    <option value="{$country.region_id}" {if $consignee.country eq $country.region_id}selected{/if}>{$country.region_name}</option>
+                                    <!-- {/foreach} -->
+                                </select>
+                                <span id="updateTip3" style="color: red; display: none;">请选择国家</span>
+                            </label>
+                        </p> 
+                        {/if}
+                        <p>
+                            <label for="provinceId"><span class="tit">省份</span>
+
+                                <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')" style="border:1px solid #ccc;">
+                                    <option value="0">{$lang.please_select}{$name_of_region[1]}</option>
+                                    <!-- {foreach from=$province_list item=province} -->
+                                    <option value="{$province.region_id}" {if $consignee.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
+                                    <!-- {/foreach} -->
+                                </select>
+                                <span id="updateTip3" style="color: red; display: none;">请选择省</span>
+                            </label>
+                        </p>
+                        <p>
+                            <label for="cityId"><span class="tit">市</span>
+                                <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')" style="border:1px solid #ccc;">
+                                    <option value="0">{$lang.please_select}{$name_of_region[2]}</option>
+                                    <!-- {foreach from=$city_list item=city} -->
+                                    <option value="{$city.region_id}" {if $consignee.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
+                                    <!-- {/foreach} -->
+                                </select>
+                                <span id="updateTip4" style="color: red; display: none;">请选择市</span>
+                            </label>
+                        </p>
+
+                        <p id="areaSelP" >
+                            <label for="areaId"><span class="tit">区/县</span>   
+                                <select name="district" id="selDistricts"  style="border:1px solid #ccc;">
+                                    <option value="0">{$lang.please_select}{$name_of_region[3]}</option>
+                                    <!-- {foreach from=$district_list item=district} -->
+                                    <option value="{$district.region_id}" {if $consignee.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
+                                    <!-- {/foreach} -->  
+                                </select> 
+                                <span id="updateTip5" style="color: red; display: none;">请选择区/县</span></label>
+                        </p>
+
+                        <p>
+                            <label for="adinfo"><span class="tit">地址类别</span>
+                                <select name="address_type" id="address_type"  style="border:1px solid #ccc;">
+                                    <option value="0">-选择家庭/公司-</option>
+                                    <option value="1" {if $consignee.address_type eq 1}selected{/if}>家庭</option>
+                                    <option value="2" {if $consignee.address_type eq 2}selected{/if}>公司</option>
+                                </select> 
+
+                            </label>
+                        </p>
+                        <p>
+                            <label for="adinfo"><span class="tit">详细地址</span>
+                                <input name="address" type="text" class="inputBg"  id="address_{$sn}" value="{$consignee.address|escape}" placeholder="详细地址" />
+                                <span id="updateTip6" style="color: red; display: none;">请填写详细地址</span>
+                            </label>
+                        </p>
+                        <p class="action">
+                            <input name="address_id" type="hidden" value="{$consignee.address_id}" />
+                            <input type="hidden" name="act" value="act_edit_consignee" />
+
+                            <button class="submit" id="add">确认</button>
+                            <button class="submit" type="button" style="background-color: red;{if $consignee.address_id}{else}display:none{/if}" onclick="javascript:window.location.href = '/Home/Charge/drop_consignee?id={$consignee.address_id}&goods_id={$goods_id}'">删除</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </form>   
+
+    </body>
+    <script type="text/javascript">
+        var process_request = "{$lang.process_request}";
+        {foreach from = $lang.passport_js item = item key = key}
+        var {$key} = "{$item}";
+        {/foreach}
+                var country_not_null = '国家不能为空';
+        var province_not_null = '省份不能为空';
+        var city_not_null = '城市不能为空';
+        var district_not_null = '区域不能为空';
+        var consignee_not_null = '收货人不能为空';
+        var address_not_null = '详细地址不能为空';
+        var username_exist = "{$lang.username_exist}";
+        var compare_no_goods = "{$lang.compare_no_goods}";
+        var btn_buy = "{$lang.btn_buy}";
+        var is_cancel = "{$lang.is_cancel}";
+        var select_spe = "{$lang.select_spe}";
+    </script>
+</html>

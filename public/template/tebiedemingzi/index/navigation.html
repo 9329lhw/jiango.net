@@ -1,0 +1,206 @@
+{include file="../public/pageheader.html"}
+{literal}
+<style type="text/css">
+    #passStrength{height:6px;width:120px;border:1px solid #ccc;padding:2px;}
+    .strengthLv1{background:red;height:6px;width:40px;}
+    .strengthLv2{background:orange;height:6px;width:80px;}
+    .strengthLv3{background:green;height:6px;width:120px;}
+</style>
+{/literal}
+<div class="main-div">
+    <form name="theForm" action="{url('/tebiedemingzi/index/saveUser')}" method="post" enctype="multipart/form-data" onsubmit="return validate();">
+        <table width="100%">
+            <tr>
+                <td class="label">{$lang.user_name}</td>
+                <td>
+                    <input type="text" name="user_name" maxlength="20" value="{$user.user_name}" size="34"/>{$lang.require_field}</td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.email}</td>
+                <td>
+                    <input type="text" name="email" value="{$user.email}" size="34" />{$lang.require_field}</td>
+            </tr>
+            <tr>
+                <td class="label">
+                    <a href="javascript:showNotice('passwordNotic');" title="{$lang.form_notice}">
+                        <img src="__IMG__/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.old_password}</td>
+                <td>
+                    <input type="password" name="old_password" size="34" />
+                    <br /><span class="notice-span" style="display:none" id="passwordNotic">{$lang.password_notic}</span></td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.new_password}</td>
+                <td>
+                    <input type="password" name="new_password" maxlength="32" size="34" oninput='edit_pwd(this.value)'/>
+                    <div id="pass-wrap" style='display:none;'>
+                        <em>密码强度：</em>
+                        <div id="passStrength"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.pwd_confirm}</td>
+                <td>
+                    <input type="password" name="pwd_confirm" value="" size="34" /></td>
+            </tr>
+            <tr>
+                <td align="left" class="label">{$lang.edit_navi}</td>
+                <td>
+                    <table style="width:300px" cellspacing="0">
+                        <tr>
+                            <td valign="top">
+                                <input type="hidden" name="nav_list" id="nav_list" />
+                                <select name="menus_navlist" id="menus_navlist" multiple="true" style="width: 120px; height: 180px" onclick="setTimeout('toggleButtonSatus()', 1);">
+                                    {foreach from=$navlist item=nav}
+                                    <option value="{$nav.action_code}">{$nav.action_name}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                            <td align="center">
+                                <input type="button" class="button" value="{$lang.move_up}" id="btnMoveUp" onclick="moveOptions('up')" disabled="true" />
+                                <input type="button" class="button" value="{$lang.move_down}" id="btnMoveDown" onclick="moveOptions('down')" disabled="true" />
+                                <input type="button" value="{$lang.add_nav}" id="btnAdd" onclick="JavaScript:addItem(theForm.all_menu_list, theForm.menus_navlist); this.disabled = true;" class="button" disabled="true" /><br />
+                                <input type="button" value="{$lang.remove}" onclick="JavaScript:delItem(theForm.menus_navlist); toggleButtonSatus()" class="button" disabled="true" id="btnRemove" />
+                            </td>
+                            <td>
+                                <select id="all_menu_list" name="all_menu_list" size="15" multiple="true" style="width:150px; height: 180px" onchange="toggleAddButton()">
+                                    {foreach from=$menulist item=menu key=key}
+                                    <option value="" style="font-weight:bold;">{$menu.action_name}</option>
+                                    {foreach from=$menu.child item=item key=k}
+                                    <option value="{$item.action_code}">&nbsp;&nbsp;&nbsp;&nbsp;{$item.action_name}</option>
+                                    {/foreach}
+                                    {/foreach}
+                                </select>
+                            </td>
+                        </tr>
+                    </table></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="{$lang.button_submit}" class="button" />&nbsp;&nbsp;&nbsp;
+                    <input type="reset" value="{$lang.button_reset}" class="button" />
+                    <input type="hidden" name="user_id" value="{$user.user_id}" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type='text/javascript' src='__JS__/utils.js'></script>
+<script type='text/javascript' src='__JS__/validator.js'></script>
+<script language="JavaScript">
+                                    document.forms['theForm'].elements['user_name'].focus();
+
+                                    //切换增加按钮的状态
+                                    function toggleAddButton()
+                                    {
+                                        var sel = document.getElementById("all_menu_list");
+                                        document.getElementById("btnAdd").disabled = (sel.selectedIndex > -1) ? false : true;
+                                    }
+
+                                    //切换移出，上移，下移按钮状态
+                                    function toggleButtonSatus()
+                                    {
+                                        var sel = document.getElementById("menus_navlist");
+                                        document.getElementById("btnRemove").disabled = (sel.selectedIndex > -1) ? false : true;
+                                        document.getElementById("btnMoveUp").disabled = (sel.selectedIndex > -1) ? false : true;
+                                        document.getElementById("btnMoveDown").disabled = (sel.selectedIndex > -1) ? false : true;
+                                    }
+
+                                    //移动选定的列表项
+                                    function moveOptions(direction)
+                                    {
+                                        var sel = document.getElementById('menus_navlist');
+                                        if (sel.selectedIndex == -1)
+                                        {
+                                            return;
+                                        }
+
+                                        len = sel.length
+                                        for (i = 0; i < len; i++)
+                                        {
+                                            if (sel.options[i].selected)
+                                            {
+                                                if (i == 0 && direction == 'up')
+                                                {
+                                                    return;
+                                                }
+
+                                                newOpt = sel.options[i].cloneNode(true);
+
+                                                sel.removeChild(sel.options[i]);
+                                                tarOpt = (direction == "up") ? sel.options[i - 1] : sel.options[i + 1]
+                                                sel.insertBefore(newOpt, tarOpt);
+                                                newOpt.selected = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    //检查表单输入的数据
+                                    function validate()
+                                    {
+                                        get_navlist();
+
+                                        validator = new Validator("theForm");
+//                                        validator.password = function (controlId, msg)
+//                                        {
+//                                            var obj = document.forms[this.formName].elements[controlId];
+//                                            obj.value = Utils.trim(obj.value);
+//                                            if (!(obj.value.length >= 6 && /\d+/.test(obj.value) && /[a-zA-Z]+/.test(obj.value)))
+//                                            {
+//                                                this.addErrorMsg(msg);
+//                                            }
+//
+//                                        }
+
+                                        validator.required("user_name", user_name_empty);
+                                        validator.required("email", email_empty, 1);
+                                        validator.isEmail("email", email_error);
+
+                                        if (document.forms['theForm'].elements['new_password'].value.length > 0)
+                                        {
+//                                            validator.password("new_password", password_invaild);
+                                            validator.eqaul("new_password", "pwd_confirm", password_error);
+                                            validator.required("old_password", '请输入旧密码!');
+                                        }
+
+                                        return validator.passed();
+                                    }
+
+                                    function get_navlist() {
+                                        var navList = document.getElementById('menus_navlist');
+                                        var navArr = new Array();
+                                        for (var i = 0; i < navList.length; i++)
+                                        {
+                                            navArr[i] = navList.options[i].value;
+                                        }
+                                        document.getElementById('nav_list').value = navArr.join(',');
+                                    }
+                                    
+                                    function edit_pwd(string){
+                                        var num = 1;
+                                        if(string.length >=6) {
+                                            if(/[a-zA-Z]+/.test(string) && /[0-9]+/.test(string) && /\W+/.test(string)) {
+                                                num = 3;
+                                            }else if(/[a-zA-Z]+/.test(string) || /[0-9]+/.test(string) || /\W+/.test(string)) {
+                                                if(string.length >= 10){
+                                                    num = 2;
+                                                }else{
+                                                    if(/[a-zA-Z]+/.test(string) && /[0-9]+/.test(string)) {
+                                                        num = 2;
+                                                    }else if(/\[a-zA-Z]+/.test(string) && /\W+/.test(string)) {
+                                                        num = 2;
+                                                    }else if(/[0-9]+/.test(string) && /\W+/.test(string)) {
+                                                        num = 2;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if(string == ''){
+                                            $('#pass-wrap').hide();
+                                        }else{
+                                            $('#passStrength').attr('class','strengthLv'+num);
+                                            $('#pass-wrap').show();
+                                        }
+                                    }
+</script>
+{include file="../public/pagefooter.html"}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{$act_title}</title>
+        <link rel="stylesheet" href="__HTIME__/css/assist.css">
+        <script src="__HTIME__/js/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="assit-friends" id="assist-join">
+            <div class="assit-bg1">
+                <img src="__HTIME__/images/assit-bg1.png" alt=""/>
+            </div>
+            <h3 class="join-partner">参与的青春伙伴</h3>
+            <div class="pos-relative">
+
+                <div class="pos-absolute">
+                    {foreach from=$joinList item=list}
+                    <ul class="partner-introduce">
+                        <li class="clearfix">
+                            <div class="left">
+                                <span class="partner-photo">
+                                    <img src="{$list.headimgurl}" alt=""/>
+                                </span>
+                                <span class="partner-name">{$list.uname}</span>
+                            </div>
+
+                            <div class="right">
+                                {if $list.data > 0}
+                                <span class="right-text">贡献了</span>
+                                <span class="assit-diamonds">
+                                    <img src="__HTIME__/images/assit-diamonds.png" alt=""/>
+                                </span>
+                                <span class="right-success-num">+{$list.data}</span>
+                                {else}
+                                <span class="right-text">污染了</span>
+                                <span class="assit-diamonds">
+                                    <img src="__HTIME__/images/wrsp.png" alt=""/>
+                                </span>
+                                <span class="right-success-num">{$list.data}</span>
+                                {/if}
+                            </div>
+                        </li>
+                        <div><img src="__HTIME__/images/line.png" alt=""/></div>
+                    </ul>
+                    {/foreach}
+                </div>
+            </div>
+            <div class="a-bottom-btn">
+                <li class="s-choice-btn" onclick="window.location.href = '/App/Htime/{if $isMy}index{else}share{/if}/user_id/{$user_id}'">
+                    <img class="r-c-btn" src="__HTIME__/images/btn-chioce.png"/>
+                    <!-- <img class="b-c-btn" src="__HTIME__/images/btn-chioce-blue.png"/> -->
+                </li>
+
+                <li class="s-rule-btn">
+                    <img class="r-r-btn" src="__HTIME__/images/btn-rule.png"/>
+                    <!-- <img class="b-r-btn" src="__HTIME__/images/btn-rule-blue.png"/> -->
+                </li>
+                <li class="s-friend-btn" onclick="window.location.href = '/App/Htime/joinList/user_id/{$user_id}'">
+                    <img class="r-f-btn" src="__HTIME__/images/btn-panter.png"/>
+                    <!-- <img class="b-f-btn" src="__HTIME__/images/btn-panter-blue.png"/> -->
+                </li>
+                <li class="s-prize-btn">
+                    <img class="r-p-btn" src="__HTIME__/images/btn-goods.png"/>
+                    <!-- <img class="b-p-btn" src="__HTIME__/images/btn-goods-blue.png"/> -->
+                </li>
+            </div>
+
+            <div class="s-rule">
+              <div class="rule-container">
+                <img class="s-rule-img" src="__HTIME__/images/s-rule-img.jpg">
+                <span class="connect-btn"></span>
+                </div>
+            </div>
+
+            <div class="assit-prizes">
+              <img src="__HTIME__/images/prize-bgImg.jpg">
+            </div>
+
+            <div class="q-code">
+                <img src="__HTIME__/images/q-code-img.gif">
+            </div>
+
+        </div>
+        <script src="__HTIME__/js/selfadaption.js"></script>
+        <script>
+        var moveBox = $(".move-case"),
+                ruleBtn = $(".s-rule-btn"),
+                helpBtn = $(".a-help-btn"),
+                ruleOutWin = $(".s-rule"),
+                pieceAddWin = $(".s-piece-add"),
+                pieceReduceWin = $(".s-piece-reduce"),
+                pieceFullWin = $(".s-piece-full"),
+                shareOutWin = $(".s-share"),
+                closeBtn = $(".gift-close"),
+                processBar = $(".a-prc-color-bar"),
+                prizeBtn = $(".s-prize-btn"),
+                prizeDiv = $(".assit-prizes"),
+                guideDiv = $(".guide-div"),
+                qcodeDiv = $(".q-code");
+            ruleBtn.click(function () {
+                ruleOutWin.addClass("show");
+                prizeDiv.removeClass("show");
+            });
+            prizeBtn.click(function () {
+                ruleOutWin.removeClass("show");
+                prizeDiv.addClass("show");
+                // $(".r-p-btn").hide();
+                // $(".b-p-btn").show();
+                // $(".r-c-btn").addClass("show");
+                // $(".b-c-btn").addClass("hide");
+                // $(".r-r-btn").removeClass("hide");
+
+            });
+
+            $(".connect-btn").click(function(){
+              $(".q-code").addClass("show");
+            });
+                        // clickShow(prizeBtn,prizeDiv);
+                        // clickHide(prizeBtn,ruleOutWin);
+                        // clickHide(prizeDiv);
+                        clickHide(qcodeDiv);
+                        function clickHide(target) {
+                            var $target = target;
+                            return $target.click(function () {
+                                $(this).removeClass("show");
+                            });
+                        }
+                        function clickShow(cTarget,sTarget){
+                          return cTarget.on("click",function(){
+                            sTarget.addClass("show");
+                          });
+                        }
+        </script>
+        <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script language="javascript" type="text/javascript">
+                        wx.config({
+                            debug: false, //这里是开启测试，如果设置为true，则打开每个步骤，都会有提示，是否成功或者失败
+                            appId: '{$appid}',
+                            timestamp: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+                            nonceStr: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+                            signature: '{$signature}',
+                            jsApiList: [
+                                // 所有要调用的 API 都要加到这个列表中
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareWeibo'
+                            ]
+                        });
+                        var title = "{$title}";
+                        var link = "{$link}";
+                        var imgUrl = "{$sharImg}";
+                        var desc = "{$desc}";
+                        wx.ready(function () {
+                            //朋友圈
+                            wx.onMenuShareTimeline({
+                                title: title, // 分享标题
+                                link: link, // 分享链接
+                                imgUrl: imgUrl // 分享图标
+                            });
+                            //好友
+                            wx.onMenuShareAppMessage({
+                                title: title, // 分享标题
+                                desc: desc, //
+                                link: link, // 分享链接
+                                imgUrl: imgUrl, // 分享图标
+                                type: '', // 分享类型,music、video或link，不填默认为link
+                                dataUrl: '' // 如果type是music或video，则要提供数据链接，默认为空
+                            });
+                            wx.onMenuShareQQ({
+                                title: title, // 分享标题
+                                desc: desc, // 分享描述
+                                link: link, // 分享链接
+                                imgUrl: imgUrl// 分享图标
+                            });
+                            wx.onMenuShareWeibo({
+                                title: title, // 分享标题
+                                desc: desc, // 分享描述
+                                link: link, // 分享链接
+                                imgUrl: imgUrl // 分享图标
+                            });
+                        });
+        </script>
+    </body>
+</html>

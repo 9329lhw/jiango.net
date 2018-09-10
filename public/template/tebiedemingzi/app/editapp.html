@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' enctype="multipart/form-data" name="theForm" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$adinfo.id}' />
+                <tr><td class="label">
+                        版本号
+                        </td><td><input type='text' name='app_code' id="code" value='{$adinfo.app_code}' /></td>
+                </tr>
+                <tr>
+                    <td class="label">客户端<td>
+                    <input type='radio' name='device' value='iOS' {if $adinfo.device eq 'iOS'}checked="true"{/if}/>iOS
+                    <input type='radio' name='device' value='Android' {if $adinfo.device eq 'Android'}checked="true"{/if}/>Android
+                </tr>
+                 <tr><td class="label">
+                        版本号描述
+                        </td>
+                        <td>
+                            <textarea name="desc">{$adinfo.desc}</textarea>
+                        </td>
+                </tr>
+                <tr><td class="label">
+                        下载地址
+                        </td><td><input type='text' name='download_url' value='{$adinfo.download_url}'></td>
+                </tr>
+                  <tr><td class="label">是否当前版本</td>
+                    <td>
+                        <input type='radio' name='status' value='1' {if $adinfo.status eq 1}checked="true"{/if}/>是
+                        <input type='radio' name='status' value='0' {if $adinfo.status eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                 <tr><td class="label">是否强制更新</td>
+                    <td>
+                        <input type='radio' name='is_update' value='1' {if $adinfo.is_update eq 1}checked="true"{/if}/>是
+                        <input type='radio' name='is_update' value='0' {if $adinfo.is_update eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+            function validate()
+            {
+                validator = new Validator("theForm");
+                validator.required("app_code",'请填写版本号');
+                if(validator.passed()){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>

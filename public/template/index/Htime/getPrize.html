@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{$act_title}</title>
+        <link rel="stylesheet" href="__HTIME__/css/assist.css">
+        <link rel="stylesheet" href="__HTIME__/css/font-awesome/css/font-awesome.min.css">
+        <link href='//cdn.webfont.youziku.com/webfonts/nomal/91949/19540/57ea3c33f629d806387bf7ee.css' rel='stylesheet' type='text/css' />
+        <script src="__HTIME__/js/jquery.min.js"></script>
+        <script src="__HTIME__/js/selfadaption.js"></script>
+        <script src="__HTIME__/js/Htimeflow.js"></script>
+    </head>
+    <body>
+        <div id="assit-getPrize" class="assit-bg-page1">
+            <img class="a-float-dec" src="__HTIME__/images/float-img.png" >
+            <div class="a-title-word">
+                <img src="__HTIME__/images/a-top-word.png">
+            </div>
+            <div class="a-process-container">
+                <span class="a-prc-text">已收集<span class="a-prc-get-num">{if $sloder}{$sloder}{else}0{/if}</span>块碎片&nbsp;&nbsp;还差<span class="a-prc-diff-num">{100 - $sloder}</span>块碎片</span>
+                <div class="a-prc-box">
+                    <img class="a-prc-color-bar" src="__HTIME__/images/a-process-bar.png">
+                </div>
+                <span class="a-prc-percent">{if $sloder}{$sloder}{else}0{/if}%</span>
+            </div>
+            {if $isJoin}
+            <div class="a-case-container case-invisibale-style">
+                <img class="a-case-img" src="__HTIME__/images/box-gif.gif">
+                <img class="a-case-tip" src="__HTIME__/images/case-type-tip01.png">
+                <img class="" src="">
+            </div>
+            {else}
+            <div class="a-case-container a-case-container-prize case-invisibale-style">
+                <img class="a-case-img" src="__HTIME__/images/box-gif.gif">
+                <img class="a-case-tip" src="__HTIME__/images/case-type-tip01.png">
+                <img class="" src="">
+            </div>
+            {/if}
+            <div class="a-tip-box a-tip-box-page1 ">
+                <img class="a-tip-bgImg" src="__HTIME__/images/a-mid-tip.png">
+                <span class="a-tip-partner-num">{$joinNum}</span>
+            </div>
+            {if $isMy}
+            {if $prizeInfo.goods_id}
+            <div class="a-help-btn">
+                {if $prizeInfo.ext2}
+                <img onclick="window.location.href='/App/Order/orderdetail?order_id={$prizeInfo.order_id}'" src="__HTIME__/images/dingdan.png">
+                {else}
+                <img onclick="addToCart('{$prizeInfo.goods_id}', '{$isEnd}')" src="__HTIME__/images/help-btn-getprize.png">
+                {/if}
+            </div>
+            {/if}
+            {/if}
+            <div class="a-bottom-btn">
+
+                <li class="s-choice-btn" onclick="window.location.href = '/App/Htime/{if $isMy}index{else}share{/if}/user_id/{$user_id}'">
+                    <img class="r-c-btn" src="__HTIME__/images/btn-chioce.png"/>
+                    <img class="b-c-btn" src="__HTIME__/images/btn-chioce-blue.png"/>
+               </li>
+
+                <li class="s-rule-btn">
+                    <img class="r-r-btn" src="__HTIME__/images/btn-rule.png"/>
+                    <img class="b-r-btn" src="__HTIME__/images/btn-rule-blue.png"/>
+                </li>
+                <li class="s-friend-btn" onclick="window.location.href = '/App/Htime/joinList/user_id/{$user_id}'">
+                    <img class="r-f-btn" src="__HTIME__/images/btn-panter.png"/>
+                    <img class="b-f-btn" src="__HTIME__/images/btn-panter-blue.png"/>
+                </li>
+                <li class="s-prize-btn">
+                    <img class="r-p-btn" src="__HTIME__/images/btn-goods.png"/>
+                    <img class="b-r-btn" src="__HTIME__/images/btn-goods-blue.png"/>
+                </li>
+            </div>
+
+            <div class="s-piece-full s-piece-full-prize">
+                <div class="piece-type-container piece-type-container-getprize">
+                    <img class="piece-type-bgImg piece-type-bgImg-getprize" src="__HTIME__/images/{if $isMy}piece-full{else}piece-un-full{/if}.png">
+                    <img class="s-goods-prize" src="{$prizeInfo.image}">
+                    <span class="prize-goods-name">{$prizeInfo.name}</span>
+                </div>
+            </div>
+            <div class="s-user-Head">
+                <img class="user-Head-img" src="{$headimgurl}">
+                <span class="user-Head-name">{$user_name}</span>
+                <img onclick="window.location.href = '/App/Htime/Report'" class="report-btn-share" src="__HTIME__/images/report-btn.png">
+            </div>
+            <div class="s-rule">
+              <div class="rule-container">
+                <img class="s-rule-img" src="__HTIME__/images/s-rule-img.jpg">
+                <span class="connect-btn"></span>
+                </div>
+            </div>
+
+            <div class="assit-prizes">
+              <img src="__HTIME__/images/prize-bgImg.jpg">
+            </div>
+
+
+        </div>
+    </body>
+    <script>
+    var moveBox = $(".move-case"),
+        ruleBtn = $(".s-rule-btn"),
+        helpBtn = $(".a-help-btn"),
+        ruleOutWin = $(".s-rule"),
+        pieceAddWin = $(".s-piece-add"),
+        pieceReduceWin = $(".s-piece-reduce"),
+        pieceFullWin = $(".s-piece-full"),
+        shareOutWin = $(".s-share"),
+        closeBtn = $(".gift-close"),
+        processBar = $(".a-prc-color-bar"),
+        prizeBtn = $(".s-prize-btn"),
+        prizeDiv = $(".assit-prizes");
+
+              ruleBtn.click(function () {
+                  $(".s-rule").addClass("show");
+                  $(".r-r-btn").addClass("hide");
+                  $(".b-r-btn").addClass("show");
+                  $(".r-c-btn").addClass("show");
+                  $(".b-c-btn").addClass("hide");
+                  $(".r-p-btn ").removeClass("hide");
+                  prizeDiv.removeClass("show");
+              });
+              prizeBtn.click(function(){
+                  prizeDiv.addClass("show");
+                  $(".r-p-btn").addClass("hide");
+                  $(".b-r-btn").addClass("show");
+                  $(".r-c-btn").addClass("show");
+                  $(".b-c-btn").addClass("hide");
+                  $(".r-r-btn").removeClass("hide");
+
+              });
+
+                  clickHide(ruleOutWin);
+                    function clickHide(target) {
+                        var $target = target;
+                        return $target.click(function () {
+                            $(this).removeClass("show");
+                        });
+                    }
+                    function clickShow(cTarget,sTarget){
+                      return cTarget.on("click",function(){
+                        sTarget.addClass("show");
+                      });
+                    }
+        processBar = $(".a-prc-color-bar");
+        function progressBarMove(value) {
+            var v = -(100 - arguments[0]) + "%";
+            return processBar.animate({
+                "left": v
+            }, 1000);
+        }
+        progressBarMove('{$sloder}');
+    </script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script language="javascript" type="text/javascript">
+        wx.config({
+            debug: false, //这里是开启测试，如果设置为true，则打开每个步骤，都会有提示，是否成功或者失败
+            appId: '{$appid}',
+            timestamp: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+            nonceStr: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+            signature: '{$signature}',
+            jsApiList: [
+                // 所有要调用的 API 都要加到这个列表中
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo'
+            ]
+        });
+        var title = "{$title}";
+        var link = "{$link}";
+        var imgUrl = "{$sharImg}";
+        var desc = "{$desc}";
+        wx.ready(function () {
+            //朋友圈
+            wx.onMenuShareTimeline({
+                title: title, // 分享标题
+                link: link, // 分享链接
+                imgUrl: imgUrl // 分享图标
+            });
+            //好友
+            wx.onMenuShareAppMessage({
+                title: title, // 分享标题
+                desc: desc, //
+                link: link, // 分享链接
+                imgUrl: imgUrl, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '' // 如果type是music或video，则要提供数据链接，默认为空
+            });
+            wx.onMenuShareQQ({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link: link, // 分享链接
+                imgUrl: imgUrl// 分享图标
+            });
+            wx.onMenuShareWeibo({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link: link, // 分享链接
+                imgUrl: imgUrl // 分享图标
+            });
+        });
+    </script>
+</html>

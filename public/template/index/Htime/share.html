@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{$act_title}</title>
+        <link rel="stylesheet" href="__HTIME__/css/assist.css">
+        <link rel="stylesheet" href="__HTIME__/css/font-awesome/css/font-awesome.min.css">
+        <link href='//cdn.webfont.youziku.com/webfonts/nomal/91949/19540/57ea3c33f629d806387bf7ee.css' rel='stylesheet' type='text/css' />        <script src="__HTIME__/js/jquery.min.js"></script>
+        <script src="__HTIME__/js/selfadaption.js"></script>
+    </head>
+    <body>
+        <div id="assit-page1" class="assit-bg-page1">
+            <img class="a-float-dec" src="__HTIME__/images/float-img.png" >
+            <div class="a-title-word">
+                <img src="__HTIME__/images/a-top-word.png">
+            </div>
+            <div class="a-process-container">
+                <span class="a-prc-text">已收集<span class="a-prc-get-num">{if $sloder}{$sloder}{else}0{/if}</span>块碎片&nbsp;&nbsp;还差<span class="a-prc-diff-num">{100 - $sloder}</span>块碎片</span>
+                <div class="a-prc-box">
+                    <img class="a-prc-color-bar" src="__HTIME__/images/a-process-bar.png">
+                </div>
+                <span class="a-prc-percent">{if $sloder}{$sloder}{else}0{/if}%</span>
+            </div>
+            {if $isJoin}
+            <div class="a-case-container case-invisibale-style" style='opacity: 1;'>
+                {if $data > 0}
+                <img class="a-case-img case-img-beaute" src="__HTIME__/images/piece-add.png">
+                <span class="piece-add-text">+<span class="piece-add-text-num">{$data}</span></span>
+                {else}
+                <img class="a-case-img case-img-beaute" src="__HTIME__/images/piece-reduce.png">
+                <span class="piece-add-text"><span class="piece-reduce-text-num">{$data}</span></span>
+                {/if}
+            </div>
+            {else}
+            <div class="a-case-container case-invisibale-style">
+                <img class="a-case-img" src="__HTIME__/images/box-gif.gif">
+                <img class="a-case-tip" src="__HTIME__/images/case-type-tip01.png">
+                <img class="" src="">
+            </div>
+            <div class="move-case">
+                <img class="a-case-img" src="__HTIME__/images/box-close.png">
+                <img class="a-case-tip" src="__HTIME__/images/case-type-tip01.png">
+            </div>
+            {/if}
+            <div class="a-tip-box a-tip-box-page1 ">
+                <img class="a-tip-bgImg" src="__HTIME__/images/tip-other-other.png">
+                <span class="a-tip-partner-num">{$joinNum}</span>
+            </div>
+            <div class="a-help-btn">
+                <img onclick="window.location.href = '/App/Htime/index/user_id/{$my_id}'" src="__HTIME__/images/help-btn-share.png">
+            </div>
+            <div class="a-bottom-btn">
+                <li class="s-choice-btn" onclick="window.location.href = '/App/Htime/share/user_id/{$user_id}'">
+                    <img src="__HTIME__/images/btn-chioce.png"/>
+                </li>
+                <li class="s-rule-btn">
+                    <img src="__HTIME__/images/btn-rule.png"/>
+                </li>
+                <li class="s-friend-btn" onclick="window.location.href = '/App/Htime/joinList/user_id/{$user_id}'">
+                    <img src="__HTIME__/images/btn-panter.png"/>
+                </li>
+                <li class="s-prize-btn">
+                    <img src="__HTIME__/images/btn-goods.png"/>
+                </li>
+            </div>
+
+            <div class="s-piece-add s-piece-add-index">
+                <div class="piece-type-container">
+                    <img class="piece-type-bgImg" src="__HTIME__/images/piece-add.png">
+                    <span class="piece-add-text">+<span class="piece-add-text-num">10</span></span>
+                </div>
+            </div>
+
+            <div class="s-piece-reduce">
+                <div class="piece-type-container">
+                    <img class="piece-type-bgImg" src="__HTIME__/images/piece-reduce.png">
+                    <span class="piece-add-text"><span class="piece-reduce-text-num">10</span></span>
+                </div>
+            </div>
+            <div class="s-piece-full s-piece-full-index">
+                <div class="piece-type-container">
+                    <img class="piece-type-bgImg" src="__HTIME__/images/piece-full.png">
+                    <img class="s-goods-prize" src="">
+                </div>
+            </div>
+
+            <div class="s-rule">
+                <div class="rule-container">
+                    <img class="s-rule-img" src="__HTIME__/images/s-rule-img.jpg">
+                    <span class="connect-btn"></span>
+                </div>
+            </div>
+
+            <div class="s-user-Head">
+                <img class="user-Head-img" src="{$headimgurl}">
+                <span class="user-Head-name">{$user_name}</span>
+                <img onclick="window.location.href = '/App/Htime/Report'" class="report-btn-share" src="__HTIME__/images/report-btn.png">
+            </div>
+
+            <div class="prize-block">
+              <img class="p-block-bgImg" src="__HTIME__/images/prize-block.png">
+              <img class="p-block-headImg" src="">
+              <span class="p-block-text">恭喜<span class="p-block-user-name"></span>获得<span class="p-block-goods"></span></span>
+            </div>
+
+            <div class="s-share">
+                <div class="s-share-tip">
+                    <img src="__HTIME__/images/share-tip.png">
+                </div>
+                <div class="s-share-text">
+                    <span class="s-share-text-top">点击右上角<span class="s-share-text-top-yellow">邀请好友</span></span>
+                    <span class="s-share-text-bottom">帮忙寻找时间碎片！</span>
+                </div>
+                <div class="s-share-icon">
+                    <img src="__HTIME__/images/share-icon.png">
+                </div>
+            </div>
+
+            <div class="q-code">
+                <img src="__HTIME__/images/q-code-img.gif">
+            </div>
+
+            <div class="a-join-container">
+
+            </div>
+
+            <div class="s-gift {if $isRegion}{if $isDoOne}show{/if}{/if}">
+                <div class="s-gift-container">
+                    <img class="s-gift-mian" src="__HTIME__/images/index-gift.png">
+                    <img onclick="window.location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1MjQxNzgxMQ==&scene=110#wechat_redirect'" class="s-gift-btn" src="__HTIME__/images/gift-btn.png">
+                    <i class="fa fa-times gift-close" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="guide-div">
+                <div class="guide-container">
+                    <img class="guide-bgImg" src="__HTIME__/images/guide-img.png">
+                    <img onclick="window.location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1NzE2ODY4Mg==&scene=110#wechat_redirect'" class="guide-btn-img" src="__HTIME__/images/guide-btn-img.png" >
+                </div>
+            </div>
+            <div class="assit-prizes">
+                <img src="__HTIME__/images/prize-bgImg.jpg">
+            </div>
+        </div>
+
+        <img  class="get-redpacket" src="__HTIME__/images/get-redpacket-img.png">
+
+        <div class="pro-div">
+          <img onclick="window.location.href='http://hh.kuailevip.cn/App/Bonus'" class="pro-img" src="__HTIME__/images/Promotion-img.jpg">
+          <span class="pro-close">
+            <i class="fa fa-times pro-fa-times" aria-hidden="true"></i>
+          </span>
+        </div>
+
+    </div>
+</body>
+<script>
+    var moveBox = $(".move-case"),
+            ruleBtn = $(".s-rule-btn"),
+            helpBtn = $(".a-help-btn"),
+            ruleOutWin = $(".s-rule"),
+            pieceAddWin = $(".s-piece-add"),
+            pieceReduceWin = $(".s-piece-reduce"),
+            pieceFullWin = $(".s-piece-full"),
+            shareOutWin = $(".s-share"),
+            closeBtn = $(".gift-close"),
+            processBar = $(".a-prc-color-bar"),
+            prizeBtn = $(".s-prize-btn"),
+            prizeDiv = $(".assit-prizes"),
+            guideDiv = $(".guide-div"),
+            qcodeDiv = $(".q-code");
+    moveBox.click(function () {
+        $.ajax({
+            type: "post",
+            url: "/App/Htime/sendHtime&user_id={$user_id}",
+            dataType: "json",
+            success: function (data) {
+                if (data.c == 1) {
+                    $(".move-case").addClass("hide");
+                    setTimeout(function () {
+                        $(".case-invisibale-style").addClass("visib-style");
+                    }, 500);
+                    if (data.result > 0) {
+                        $(".piece-add-text-num").text(data.result);
+                        setTimeout(function () {
+                            $(".s-piece-add").addClass("show");
+                        }, 1500);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1501);
+                    } else {
+                        $(".piece-reduce-text-num").text(data.result);
+                        setTimeout(function () {
+                            $(".s-piece-reduce").addClass("show");
+                        }, 1500);
+                    }
+
+                } else if (data.c == 2) {
+//                        $(".move-case").addClass("hide");
+                    $(".guide-div").addClass("show");
+                } else {
+                    alert(data.err_msg);
+                }
+            }
+        });
+
+    });
+    ruleBtn.click(function () {
+        $(".s-rule").addClass("show");
+    });
+//    helpBtn.click(function () {
+//        shareOutWin.addClass("show");
+//    });
+    closeBtn.click(function () {
+        $(".s-gift").addClass("hide");
+    });
+    clickHide(ruleOutWin);
+    clickHide(guideDiv);
+    // clickHide(pieceAddWin);
+    // clickHide(pieceReduceWin);
+    // clickHide(pieceFullWin);
+    clickHide(shareOutWin);
+    clickHide(qcodeDiv);
+    clickShow(prizeBtn, prizeDiv);
+    function clickHide(target) {
+        var $target = target;
+        return $target.click(function () {
+            $(this).removeClass("show");
+        });
+    }
+    function clickShow(cTarget, sTarget) {
+        return cTarget.on("click", function () {
+            sTarget.addClass("show");
+        });
+    }
+    function progressBarMove(value) {
+        var v = -(100 - arguments[0]) + "%";
+        return processBar.animate({
+            "left": v
+        }, 1000);
+    }
+    progressBarMove('{$sloder}');
+    $(".connect-btn").click(function () {
+        $(".q-code").addClass("show");
+    });
+
+
+    var headImgSrc = [
+        "http://wx.qlogo.cn/mmopen/5ZQ3V8nVdKol6zqwfVgzwP1A4HlchaicVZkaDZPHpBu0CKhpStapNDjZqpt8yun1RUgRDeKiauRsjVsYNOpWXKlg/132",
+        "http://wx.qlogo.cn/mmopen/fyiaorlCV9WrmibnDialrtBeGNh4FibhpWEqQ2HdTrTsDOHbrGw6QM2iafUdcWYR1BeC5rCKicps5Gc67Mw4E8XVyiaeJnotWjJj0uo/132",
+        "http://wx.qlogo.cn/mmopen/C0ia5VboPXHuITGxtQasID0O7j5JmeaLSK7FrttsvHhiaNxaFt0AjkzW9EDtAnO4fJr4FR96L2er2icNMrmrzF0d4I2foxicsHmJ/132",
+        "http://wx.qlogo.cn/mmopen/ujRRd5yoVdsokyz4gTeQIgFiarGCwqj5riceQNJ2DuXL4uKHEQb4cOypsQL4rQUTUZN3Xpt2PPfcib30egbqGCDLkB4VlxCrzgX/132",
+        "http://wx.qlogo.cn/mmopen/P6hbr2XYIOWV5uOluDYjic7E0EibI0MDTmwO35Xqj3Gibocibic8Gxc5qV6EunKtDh2uWudv7SP6ZnAzqX58YBxooDwr5q4Et35j7/132",
+        "http://wx.qlogo.cn/mmopen/5ZQ3V8nVdKo9iclzwxnWQ89jm85xWJC6LMahhDWiag2ibdo0BGTttu8CtRiaOlvKr5iatQpfC3xDVdKZuC0aaN7Z8ee7MlLLmlQPD/132",
+        "http://wx.qlogo.cn/mmopen/P6hbr2XYIOVncEr9iaiae3eIV09Z2WbjM09mYAHTkZgx2LDwVibVh0crY6I8dIXHPF7OOYicvumKZA9Qh9HEbsGh3z5O19ghwXjb/132",
+        "http://wx.qlogo.cn/mmopen/8BMjOUkYWMEugLeiamhjtnOLZRiaOLibaTdFQbiaJRyVaP6O1o2GghQxsvGfUQ0ofFMIphAlZfZeea7ZXjXibWLP7Ckc8F5xFGMHD/132",
+        "http://wx.qlogo.cn/mmopen/8BMjOUkYWMEugLeiamhjtnOEdDGCz0viacf5BziaM1Hbwvu49kVyDWxRJJxjTchNYfPmyrYxF6fgp4OTqAxX841OD2YNVbQtHdE/132",
+        "http://wx.qlogo.cn/mmopen/P6hbr2XYIOWrxlvAwibBSsLZch4wOBLmDZATtOliaviac3ztCvaG1yb7lziccr4bgB1WVbCgOR0WtkWQVqDMJ22U6vG3xosoDjtH/132"
+    ];
+    var prizeNane = ["5元现金红包","10元现金红包","iphone7","美的电饭煲","汐汐丽焕彩丽颜面霜","汐汐丽活效明眸眼霜","汐汐丽胶原蛋白拍拍乳","汐汐丽黑头导出精华液"];
+    var userName = ["三年梦","待你如故","天黑黑","久爱不腻","昔年昔日昔时 ","左手丶若不离","比冬天的暖炉还暖","空人空心空世界","比夏天的凉糕还甜","人心险恶我守护你","小女人丶"]
+    var randomTen = Math.floor(Math.random() * (9 - 0) + 0);
+    var randomEight = Math.floor(Math.random() * (7 - 0) + 0);
+    $(".p-block-headImg")[0].src=headImgSrc[randomTen];
+    $(".p-block-goods")[0].innerHTML = prizeNane[randomEight];
+    $(".p-block-user-name")[0].innerHTML = userName[randomTen];
+    setInterval(function(){
+      var randomTen = Math.floor(Math.random() * (9 - 0) + 0);
+      var randomEight = Math.floor(Math.random() * (7 - 0) + 0);
+      $(".p-block-headImg")[0].src=headImgSrc[randomTen];
+      $(".p-block-goods")[0].innerHTML = prizeNane[randomEight];
+      $(".p-block-user-name")[0].innerHTML = userName[randomTen];
+    },7000);
+
+
+    $(".get-redpacket").click(function(){
+      $(".pro-div").addClass("show");
+    });
+    $(".pro-close").click(function(){
+      $(".pro-div").removeClass("show");
+    });
+
+</script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script language="javascript" type="text/javascript">
+    wx.config({
+        debug: false, //这里是开启测试，如果设置为true，则打开每个步骤，都会有提示，是否成功或者失败
+        appId: '{$appid}',
+        timestamp: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+        nonceStr: '{$timestamp}', //这个一定要与上面的php代码里的一样。
+        signature: '{$signature}',
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo'
+        ]
+    });
+    var title = "{$title}";
+    var link = "{$link}";
+    var imgUrl = "{$sharImg}";
+    var desc = "{$desc}";
+    wx.ready(function () {
+        //朋友圈
+        wx.onMenuShareTimeline({
+            title: title, // 分享标题
+            link: link, // 分享链接
+            imgUrl: imgUrl // 分享图标
+        });
+        //好友
+        wx.onMenuShareAppMessage({
+            title: title, // 分享标题
+            desc: desc, //
+            link: link, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '' // 如果type是music或video，则要提供数据链接，默认为空
+        });
+        wx.onMenuShareQQ({
+            title: title, // 分享标题
+            desc: desc, // 分享描述
+            link: link, // 分享链接
+            imgUrl: imgUrl// 分享图标
+        });
+        wx.onMenuShareWeibo({
+            title: title, // 分享标题
+            desc: desc, // 分享描述
+            link: link, // 分享链接
+            imgUrl: imgUrl // 分享图标
+        });
+    });
+</script>
+</html>

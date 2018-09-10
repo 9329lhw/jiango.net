@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="Keywords" content="{$keywords}" />
+    <meta name="" content="" />
+    <title>投诉</title>
+    <link rel="stylesheet" href="__HTIME__/css/complaint.css">
+    <link rel="stylesheet" href="__HTIME__/css/font-awesome/css/font-awesome.min.css">
+    <script src="__HTIME__/js/jquery.min.js"></script>
+    <script src="__HTIME__/js/limitTextarea.js"></script>
+    <script src="__HTIME__/js/selfadaption.js"></script>
+</head>
+
+<body id="page2">
+    <div class="container">
+        <div class="complaint-meg-container">
+            <span class="error-tip-top">投诉描述不能超过50个字符</span>
+            <img class="error-tip-icon" src="__HTIME__/images/error-tip-icon.png">
+            <span class="complaint-meg-header">投诉描述</span>
+            <br />
+            <textarea class="complaint-meg-ipt-box" rows="8" cols="40"></textarea>
+        </div>
+        <button class="complaint-reson-page-next-step-btn page2-btn">提交</button>
+
+    </div>
+
+</body>
+<script>
+    var textContent = $(".complaint-meg-ipt-box");
+    textNum = textContent.val().length;
+    console.log(textNum);
+    $('.complaint-meg-ipt-box').limitTextarea({
+        maxNumber: 50,
+        position: 'bottom',
+         onOk:function(){ $('.complaint-meg-ipt-box').css('background-color','white');
+    }, onOver: function() {
+        textContent.css("color", "#E15E63");
+        $(".error-tip-top").fadeIn();
+        $(".error-tip-icon").show();
+        $("#info>b").html(textNum);
+        setTimeout(function() {
+            textContent.val("");
+            textContent.css("color", "#2C2C2C");
+            $(".error-tip-top").hide();
+            $(".error-tip-icon").hide();
+        }, 4000);
+    }
+    });
+
+    $(".page2-btn").click(function(){
+      if(!!$(".complaint-meg-ipt-box").val()){
+        window.location.href = "/App/Htime/doRecode";
+      }
+    });
+</script>
+
+</html>

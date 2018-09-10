@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <script src="__JS__/utils.js"></script>
+    </head>
+    <body>
+        <div class="list-div" id="listDiv">
+            <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+                <tr>
+                    <th align="center">序号</th>
+                    <th align="center">id</th>
+                    <th align="center">图标</th>
+                    <th align="center">名称</th>
+                    <th align="center">首页显示</th>
+                    <th align="center">状态</th>
+                    <th align="center">标签</th>
+                    <th align="center">添加时间</th>
+                    <th>{$lang.handler}</th>
+                </tr>
+                {foreach from=$catelist item=item}
+                <tr align="center">
+                    <td align="center">{$item.ordid}</td>
+                    <td align="center">{$item.id}</td>
+                    <td align="center"><img src="__UPLOAD__{$item.extimg}" height="25px" width="25px"></td>
+                    <td align="center">{$item.name}</td>
+                    <td align="center">{if $item.board_id ==1}首页{else}搜索页{/if}</td>
+                    <td align="center">{if $item.status ==1}显示{else}不显示{/if}</td>
+                    <td align="center">{if $item.tag ==""}无标签{else}{$item.tag}{/if}</td>
+                    <td align="center">{$item.create_time}</td>
+                    <td width="30%" align="center" class="nowrap" valign="top">
+                        {if checkPriv('/admin/permission/editAction')}<a href='/admin/category/editCategory/id/{$item.id}'>编辑</a>{/if}
+                        {if checkPriv('/admin/permission/deleteAction')}<a href='/admin/category/deleteCategory/id/{$item.id}'>删除</a>{/if}
+                    </td>
+                </tr>
+                {/foreach}
+            </table>
+        </div>
+    </body>
+</html>

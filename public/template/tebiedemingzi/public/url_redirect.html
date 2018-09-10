@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>页面跳转</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="__CSS__/main.css" rel="stylesheet" type="text/css" />
+        <link href="__CSS__/general.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="list-div">
+            <div style="background:#FFF; padding: 20px 50px; margin: 2px;">
+                <table align="center" width="400">
+                    <tr>
+                        <td width="50" valign="top">
+                            {if $data.type==0}
+                            <img src="__IMG__/information.gif" width="32" height="32" border="0" alt="information" />
+                            {elseif $data.type eq 1}
+                            <img src="__IMG__/warning.gif" width="32" height="32" border="0" alt="warning" />
+                            {else}
+                            <img src="__IMG__/confirm.gif" width="32" height="32" border="0" alt="confirm" />
+                            {/if}
+                        </td>
+                        <td style="font-size: 14px; font-weight: bold">{$data.message|default:"页面跳转"}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td id="redirectionMsg">
+                            {if $data.time gt 0}如果您不做出选择，将在 <span id="spanSeconds">{$data.time}</span> 秒后跳转到第一个链接地址。{/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <ul style="margin:0; padding:0 10px" class="msg-link">
+                            {foreach from=$link item=value }
+                                <li><a href="{if $value.url eq ''}javascript:history.go(-1){else}{$value.url}{/if}">{$value.text}</a></li>
+                            {/foreach}
+                            </ul>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <script language="JavaScript">
+            var seconds = {$data.time};
+            var defaultUrl = "{$data.url}";
+
+            onload = function ()
+            {
+                if (defaultUrl == 'javascript:history.go(-1)' && window.history.length == 0)
+                {
+                    document.getElementById('redirectionMsg').innerHTML = '';
+                    return;
+                }
+
+                window.setInterval(redirection, 1000);
+            }
+            function redirection()
+            {
+                if (seconds <= 0)
+                {
+                    window.clearInterval();
+                    return;
+                }
+
+                seconds--;
+                document.getElementById('spanSeconds').innerHTML = seconds;
+
+                if (seconds == 0)
+                {
+                    window.clearInterval();
+                    if(defaultUrl == ''){
+                        history.go(-1);
+                    }else{
+                        location.href = defaultUrl;
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

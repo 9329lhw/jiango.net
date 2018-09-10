@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <script src="__JS__/layer/layer.js"></script>
+    </head>
+    <body>
+        <table cellspacing="1" cellpadding="3">
+            <tr>
+                <td class="label">
+                    采集平台
+                </td>
+                <td>
+                    <select name="type">
+                        <option>请选择采集平台</option>
+                        {foreach from=$collect_list item=item}
+                        <option value="{$item.type}">{$item.name}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <!--                <tr>
+                                <td class="label">
+                                    请选择分类
+                                </td>
+                                <td>
+                                    <select name="board_id">
+                                        <option>请选择采集平台</option>
+                                        {foreach from=$collect_list item=item}
+                                        <option value="{$item.type}">{$item.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                            </tr>-->
+            <tr>
+                <td class="label">
+                    选择页数
+                </td>
+                <td>
+                    <input type='text' name='page'>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <button onclick="draws_check()">提交</button>  
+                </td>
+            </tr>
+        </table>
+        <script>
+            function draws_check() {
+            var page = $("input[name='page']:checked").val();
+            var type = $("select[name='type']").val();
+            
+            $.post("/tebiedemingzi/collect/collect",{ page: page,type:type}, function (data) {
+                var obj = eval('(' + data + ')');
+                layer.msg(obj.msg);
+            });
+        }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link href="__CSS__/general.css" rel="stylesheet" type="text/css" />
+        <link href="__CSS__/main.css" rel="stylesheet" type="text/css" />
+        <script src="__JS__/jquery1.10.2.js"></script>
+        <script src="__JS__/common.js"></script>
+        <script src="__JS__/utils.js"></script>
+        <script src="__JS__/layer/layer.js"></script>
+    </head>
+    <body>
+        <div class="list-div" id="listDiv">
+            <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+                <tr>
+                    <th align="center">id</th>
+                    <th align="center">用户名称</th>
+                    <th align="center">提现金额</th>
+                    <th align="center">手机号</th>
+                    <th align="center">用户真实姓名</th>
+                    <th align="center">转账账号</th>
+                    <th align="center">提现状态</th>
+                    <th align="center">操作人</th>
+                    <th align="center">申请时间</th>
+                    <th align="center">操作时间</th>
+                    <th>{$lang.handler}</th>
+                </tr>
+                {foreach from=$drawslist item=item}
+                <tr align="left">
+                    <td align="center">{$item.id}</td>
+                    <td align="center">{$item.nickname}</td>
+                    <td align="center">{$item.amount}</td>
+                    <td align="center">{$item.tel}</td>
+                    <td align="center">{$item.realname}</td>
+                    <td align="center">{$item.aplay_number}</td>
+                    <td align="center">{if $item.status eq 0}等待审核中{elseif $item.status eq 1}审核完成{elseif $item.status eq 2}审核被拒{elseif $item.status eq 3}转账成功{elseif $item.status eq 4}转账失败{/if}</td>
+                    <td align="center">{$item.admin_id}</td>
+                    <td align="center">{$item.create_time}</td>
+                    <td align="center">{$item.update_time}</td>
+                    <td width="30%" align="center" class="nowrap" valign="top">
+                        {if $item.status eq 0}
+                        <button onclick="check({$item.id},{$item.status})">等待审核</button>  
+                        {elseif $item.status eq 1}
+                        <button onclick="check({$item.id},{$item.status})">手动转账</button>  
+                        {/if}
+                    </td>
+                </tr>
+                {/foreach}
+            </table>
+        </div>
+    </body>
+    <script>
+        function check(id,status){
+            if(id == ''){
+                layer.alert('数据有误');
+                return false;
+            }
+            if(status == 0){
+               layer.open({
+                    type: 2,
+                    title: '转账审核',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['300px' , '300px'],
+                    content: '/admin/draws/check/id/'+id
+                }); 
+            }
+            
+            if(status == 1){
+               layer.open({
+                    type: 2,
+                    title: '确认转账',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['300px' , '300px'],
+                    content: '/admin/draws/transfer/id/'+id
+                }); 
+            }
+            
+        }
+    </script>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <script src="__JS__/utils.js"></script>
+    </head>
+    <body>
+        <div class="list-div" id="listDiv">
+            <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+                <tr>
+                    <th align="left" style="padding-left: 35px;">名称</th>
+                    {if checkPriv('/tebiedemingzi/permission/editAction') || checkPriv('/tebiedemingzi/permission/deleteAction')}
+                    <th>{$lang.handler}</th>
+                    {/if}
+                </tr>
+                {foreach from=$permissionlist item=item}
+                <tr align="left" class="{$item.level}" id="{$item.level}_{$item.action_id}"{if $item.level gt 0} style="display:none;"{/if}>
+                    <td align="left" class="first-cell nowrap" valign="top" >
+                        <img src="__IMG__/menu_plus.gif" id="icon_{$item.level}_{$item.action_id}" width="9" height="9" border="0" style="margin-left:{$item.level}em" onclick="rowClicked(this)" />
+                        <span>{$item.action_name|escape}</span>
+                    </td>
+                    {if checkPriv('/tebiedemingzi/permission/editAction') || checkPriv('/tebiedemingzi/permission/deleteAction')}
+                    <td width="30%" align="center" class="nowrap" valign="top">
+                        {if $item.parent_id eq '0'}
+                            <a href='/tebiedemingzi/permission/editAction/pid/{$item.action_id}'>添加子权限</a>
+                        {/if}
+                        {if checkPriv('/tebiedemingzi/permission/editAction')}<a href='/tebiedemingzi/permission/editAction/id/{$item.action_id}'>编辑</a>{/if}
+                        {if checkPriv('/tebiedemingzi/permission/deleteAction')}<a href='/tebiedemingzi/permission/deleteAction/id/{$item.action_id}'>删除</a>{/if}
+                    </td>
+                    {/if}
+                </tr>
+                {/foreach}
+            </table>
+        </div>
+        <script language="JavaScript">
+            var imgPlus = new Image();
+            imgPlus.src = "__IMG__/menu_plus.gif";
+            /**
+             * 折叠菜单列表
+             */
+            function rowClicked(obj)
+            {
+                // 当前图像
+                img = obj;
+                // 取得上二级tr>td>img对象
+                obj = obj.parentNode.parentNode;
+                // 整个菜单列表表格
+                var tbl = document.getElementById("list-table");
+                // 当前菜单级别
+                var lvl = parseInt(obj.className);
+                // 是否找到元素
+                var fnd = false;
+                var sub_display = img.src.indexOf('menu_minus.gif') > 0 ? 'none' : (Browser.isIE) ? 'block' : 'table-row';
+                // 遍历所有的菜单
+                for (i = 0; i < tbl.rows.length; i++)
+                {
+                    var row = tbl.rows[i];
+                    if (row == obj)
+                    {
+                        // 找到当前行
+                        fnd = true;
+                        //document.getElementById('result').innerHTML += 'Find row at ' + i +"<br/>";
+                    } else
+                    {
+                        if (fnd == true)
+                        {
+                            var cur = parseInt(row.className);
+                            var icon = 'icon_' + row.id;
+                            if (cur > lvl)
+                            {
+                                row.style.display = sub_display;
+                                if (sub_display != 'none')
+                                {
+                                    var iconimg = document.getElementById(icon);
+                                    iconimg.src = iconimg.src.replace('plus.gif', 'minus.gif');
+                                }
+                            } else
+                            {
+                                fnd = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (i = 0; i < obj.cells[0].childNodes.length; i++)
+                {
+                    var imgObj = obj.cells[0].childNodes[i];
+                    if (imgObj.tagName == "IMG" && imgObj.src != '__IMG__/menu_arrow.gif')
+                    {
+                        imgObj.src = (imgObj.src == imgPlus.src) ? '__IMG__/menu_minus.gif' : imgPlus.src;
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

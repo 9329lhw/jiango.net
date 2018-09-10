@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' enctype="multipart/form-data" name="theForm" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$adinfo.id}' />
+                <tr><td class="label">
+                        广告标题
+                        </td><td><input type='text' name='name' id="code" value='{$adinfo.name}' /></td>
+                </tr>
+                 <tr><td class="label">
+                        广告位置
+                        </td>
+                        <td>
+                            <select name="board_id">
+                                <option value="1" {if $cateinfo.board_id eq 1}selected{/if}>首页</option>
+                                <option value="2" {if $cateinfo.board_id eq 2}selected{/if}>搜索页</option>
+                            </select>
+                        </td>
+                </tr>
+                <tr><td class="label">
+                       跳转类型
+                        </td>
+                        <td>
+                            <select name="type">
+                                <option value="0">请选择跳转位置</option>
+                                <option value="1" {if $cateinfo.type eq 1}selected{/if}>分类列表跳转</option>
+                                <option value="2" {if $cateinfo.type eq 2}selected{/if}>爆款列表跳转</option>
+                                <option value="3" {if $cateinfo.type eq 3}selected{/if}>h5跳转</option>
+                                <option value="4" {if $cateinfo.type eq 4}selected{/if}>分享跳转</option>
+                                <option value="5" {if $cateinfo.type eq 5}selected{/if}>商品详情</option>
+                                <option value="6" {if $cateinfo.type eq 6}selected{/if}>淘宝跳转</option>
+                            </select>
+                        </td>
+                </tr>
+                <tr><td class="label">
+                        跳转参数
+                        </td><td><input type='text' name='param' value='{$adinfo.param}'>*仅供跳转商品详情页使用</td>
+                </tr>
+                <tr><td class="label">
+                        跳转分类
+                        </td><td><input type='text' name='tag' value='{$adinfo.tag}'>*仅供跳转分类跳转页使用</td>
+                </tr>
+                <tr><td class="label">
+                        广告链接
+                        </td><td><input type='text' name='url' value='{$adinfo.url}'></td>
+                </tr>
+                <tr><td class="label">
+                        图片
+                        </td>
+                        <td>
+                            <img src="__UPLOAD__{$adinfo.extimg}" height="60px" width="60px"><br/>
+                            <input type='file' name='extimg' value='{$adinfo.extimg}'>
+                        </td>
+                </tr>
+                  <tr><td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' name='status' value='1' {if $adinfo.status eq 1}checked="true"{/if}/>是
+                        <input type='radio' name='status' value='0' {if $adinfo.status eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr><td class="label">
+                        排序
+                    </td>
+                    <td><input type='text' name='ordid' value='{$adinfo.ordid}'></td>
+                </tr>
+                <tr><td class="label">
+                        淘口令
+                    </td>
+                    <td><input type='text' name='tbpwd' value='{$adinfo.tbpwd}'></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+            function validate()
+            {
+                validator = new Validator("theForm");
+                validator.required("name",'请填写广告标题');
+                validator.required("url",'请填写广告链接');
+                if(validator.passed()){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,324 @@
+{include file="../public/pageheader.html"}
+<ul id="cloud_list" style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
+
+</ul>
+<ul id="lilist" style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
+    {if isset($update_message)}
+    <li class="Start315" style="background-color: #efb21a;color: #fbfbff">{$update_message}</li>
+    {/if}
+    {if isset($warning_arr)}
+    {foreach from=$warning_arr item=warning}
+    <li class="Start315">{$warning}</li>
+    {/foreach}
+    {/if}
+</ul>
+<!-- start personal message -->
+{if isset($admin_msg)}
+<div class="list-div" style="border: 1px solid #CC0000">
+    <table cellspacing='1' cellpadding='3'>
+        <tr>
+            <th>{$lang.pm_title}</th>
+            <th>{$lang.pm_username}</th>
+            <th>{$lang.pm_time}</th>
+        </tr>
+        {foreach from=$admin_msg item=msg}
+        <tr align="center">
+            <td align="left"><a href="message.php?act=view&id={$msg.message_id}">{$msg.title|truncate:60:"..."}</a></td>
+            <td>{$msg.user_name}</td>
+            <td>{$msg.send_date}</td>
+        </tr>
+        {/foreach}
+    </table>
+</div>
+<br />
+{/if}
+<div class="list-div">
+    <table cellspacing='1' cellpadding='3'>
+        <tr>
+            <th colspan="6" class="group-title">统计信息</th>
+        </tr>
+        <tr>
+            <td width="15%">用户总余额</td>
+            <td width="18%">
+                <strong>{$total_user_point}</strong>
+                <br>邀请：{$points.invite}，代言：{$points.boss}，合伙：{$points.partner}
+                <br>抽奖：{$points.prize}，返利：{$points.rebate}，关注：{$points.subscribe}
+                <br>活动红包：{$points.redpack}，签到：{$points.sign_in}
+            </td>
+            <td width="15%">待提现余额</td>
+            <td width="18%"><strong>{$total_point}</strong></td>
+            <td width="15%">已提现余额</td>
+            <td><strong>{$draw_point}</strong></td>
+        </tr>
+        <tr>
+            <td width="15%">收益总额</td>
+            <td width="18%"><strong>{$total_income}</strong></td>
+            <td>昨日收益</td>
+            <td><strong>{$last_income}</strong></td>
+            <td>今日收益</td>
+            <td><strong>{$today_income}</strong></td>
+        </tr>
+        <tr>
+            <td width="15%">交易总额</td>
+            <td width="18%"><strong>{$total_pay_price}</strong></td>
+            <td>昨日交易额</td>
+            <td><strong>{$last_pay_price}</strong></td>
+            <td>今日交易额</td>
+            <td><strong>{$today_pay_price}</strong></td>
+        </tr>
+        <tr>
+            <td width="15%">订单总数</td>
+            <td width="18%"><strong>{$order_num}</strong></td>
+            <td>昨日订单数</td>
+            <td><strong>{$last_order_num}</strong></td>
+            <td>今日订单数</td>
+            <td><strong>{$today_order_num}</strong></td>
+        </tr>
+        <tr>
+            <td width="15%">会员总数</td>
+            <td><strong>{$user_num}</strong></td>
+             <td>昨日新增会员</td>
+            <td><strong>{$last_user_num}</strong></td>
+            <td>今日新增会员</td>
+            <td><strong>{$today_user_num}</strong></td>          
+        </tr>
+    </table>
+</div>
+<br>
+<!-- start system information -->
+<!--<div class="list-div">
+    <table cellspacing='1' cellpadding='3'>
+        <tr>
+            <th colspan="4" class="group-title">{$lang.system_info}</th>
+        </tr>
+        <tr>
+            <td width="20%">{$lang.os}</td>
+            <td width="30%">{$sys_info.os} ({$sys_info.ip})</td>
+            <td width="20%">{$lang.web_server}</td>
+            <td width="30%">{$sys_info.web_server}</td>
+        </tr>
+        <tr>
+            <td>{$lang.php_version}</td>
+            <td>{$sys_info.php_ver}</td>
+            <td>{$lang.mysql_version}</td>
+            <td>{$sys_info.mysql_ver}</td>
+        </tr>
+        <tr>
+            <td>{$lang.safe_mode}</td>
+            <td>{$sys_info.safe_mode}</td>
+            <td>{$lang.safe_mode_gid}</td>
+            <td>{$sys_info.safe_mode_gid}</td>
+        </tr>
+        <tr>
+            <td>{$lang.socket}</td>
+            <td>{$sys_info.socket}</td>
+            <td>{$lang.timezone}</td>
+            <td>{$sys_info.timezone}</td>
+        </tr>
+        <tr>
+            <td>{$lang.zlib}</td>
+            <td>{$sys_info.zlib}</td>
+            <td>{$lang.max_filesize}</td>
+            <td>{$sys_info.max_filesize}</td>
+        </tr>
+    </table>
+</div>-->
+<div id="main" style="width: 800px;height:300px;"></div>
+<div id="main1" style="width: 800px;height:300px;"></div>
+<div id="income_movement" style="width: 800px;height:300px;"></div>
+<script src="__JS__/transport.js"></script>
+<script src="__JS__/utils.js"></script>
+<script src="__JS__/echarts.min.js"></script>
+<script type="Text/Javascript" language="JavaScript">
+ 
+      function api_styel()
+      {
+        if(document.getElementById("Marquee") != null)
+        {
+            var Mar = document.getElementById("Marquee");
+            if (Browser.isIE)
+            {
+              Mar.style.height = "52px";
+            }
+            else
+            {
+              Mar.style.height = "36px";
+            }
+            
+            var child_div=Mar.getElementsByTagName("div");
+
+        var picH = 16;//移动高度
+        var scrollstep=2;//移动步幅,越大越快
+        var scrolltime=30;//移动频度(毫秒)越大越慢
+        var stoptime=4000;//间断时间(毫秒)
+        var tmpH = 0;
+        
+        function start()
+        {
+          if(tmpH < picH)
+          {
+            tmpH += scrollstep;
+            if(tmpH > picH )tmpH = picH ;
+            Mar.scrollTop = tmpH;
+            setTimeout(start,scrolltime);
+          }
+          else
+          {
+            tmpH = 0;
+            Mar.appendChild(child_div[0]);
+            Mar.scrollTop = 0;
+            setTimeout(start,stoptime);
+          }
+        }
+        setTimeout(start,stoptime);
+        }
+      }
+      
+      // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '运营折线图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['新增用户','订单数']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: {$date}
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'新增用户',
+                    type:'line',
+                    stack: '总量',
+                    data:{$user_movements}
+                },
+                {
+                    name:'订单数',
+                    type:'line',
+                    stack: '总量',
+                    data:{$order_movements}
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        
+        // 基于准备好的dom，初始化echarts实例
+        var myChart1 = echarts.init(document.getElementById('main1'));
+
+        // 指定图表的配置项和数据
+        var option1 = {
+            title: {
+                text: '交易额折线图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['交易额']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: {$date}
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'交易额',
+                    type:'line',
+                    stack: '总量',
+                    data:{$pay_movements}
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart1.setOption(option1);
+        
+        // 基于准备好的dom，初始化echarts实例
+        var incomeChart = echarts.init(document.getElementById('income_movement'));
+
+        // 指定图表的配置项和数据
+        var incomeOption = {
+            title: {
+                text: '收益折线图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['收益']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: {$date}
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'收益',
+                    type:'line',
+                    stack: '总量',
+                    data:{$income_movements}
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        incomeChart.setOption(incomeOption);
+</script>
+{include file="../public/pagefooter.html"}

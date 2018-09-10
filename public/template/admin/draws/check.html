@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="__JS__/jquery1.10.2.js"></script>
+        <script src="__JS__/layer/layer.js"></script>
+    </head>
+    <body>
+        <table cellspacing="1" cellpadding="3">
+            <tr><td class="label">是否审核通过</td>
+                <td>
+                    <input type='radio' name='status' value='1'/>是
+                    <input type='radio' name='status' value='2'/>否
+                </td>
+            </tr>
+            <tbody class="msg" style="display:none;">
+            <tr>
+                <td class="label">失败描述</td>
+                <td>
+                    <select name="msg_id">
+                        <option value="0">请选择失败原因</option>
+                        <option value="1">账号信息不对</option>
+                        <option value="2">数据信息不对</option>
+                        <option value="3">用户刷的数据</option>
+                        <option value="4">其他原因</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+            <td colspan="2" align="right">
+                <button onclick="draws_check({$id})">提交</button>  
+            </td>
+        </tr>
+    </table>
+    <script>
+        $(function () {
+            $('input:radio[name="status"]').change( function(){
+                if(this.value == 2){
+                    $('.msg').show();
+                }else{
+                    $('.msg').hide();
+                }
+            });
+        });
+        function draws_check(draws_id) {
+            var status = $("input[name='status']:checked").val();
+            var msg = $("select[name='msg_id']").val();
+            if(draws_id == null){
+                layer.msg('id不能为空');
+                return false;
+            }
+            if(status == null){
+                layer.msg('状态不能为空');
+                return false;
+            }
+            
+            $.get("/admin/draws/edit",{ id: draws_id,status:status,msg_id:msg}, function (data) {
+                var obj = eval('(' + data + ')');
+                layer.msg(obj.msg);
+                window.parent.location.reload();
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            });
+        }
+    </script>
+</body>
+</html>

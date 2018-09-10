@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$cateinfo.id}' />
+                <tr><td class="label">
+                        名称
+                        </td><td><input type='text' name='name' id="code" value='{$cateinfo.name}' /></td>
+                </tr>
+                <tr><td class="label">
+                        显示位置
+                        </td>
+                        <td>
+                            <select name="board_id">
+                                <option>请选择位置</option>
+                                <option value="1" {if $cateinfo.board_id eq 1}selected{/if}>首页</option>
+                                <option value="2" {if $cateinfo.board_id eq 2}selected{/if}>搜索页</option>
+                            </select>
+                        </td>
+                </tr>
+                <tr><td class="label">
+                        排序
+                        </td><td><input type='text' name='ordid' value='{$cateinfo.ordid}'></td>
+                </tr>
+                <tr><td class="label">
+                        分类标签
+                        </td><td><input type='text' name='tag' value='{$cateinfo.tag}'></td>
+                </tr>
+                <tr><td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' name='status' value='1' {if $cateinfo.status eq 1}checked="true"{/if}/>是
+                        <input type='radio' name='status' value='0' {if $cateinfo.status eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr><td class="label">
+                        图标
+                    </td>
+                    <td>
+                        <img src="__UPLOAD__{$cateinfo.extimg}" height="60px" width="60px"><br/>
+                        <input type='file' name='extimg' value='{$cateinfo.extimg}'>
+                    </td>
+                </tr>
+                <tr><td class="label">
+                        url
+                    </td>
+                    <td><input type='text' name='url' value='{$cateinfo.url}'></td>
+                </tr>
+                <tr><td class="label">
+                        描述
+                    </td>
+                    <td>
+                        <input type='text' name='desc' value='{$cateinfo.desc}'>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+            function validate()
+            {
+                validator = new Validator("theForm");
+                validator.required("name",'请填写分类标题');
+                validator.required("url",'请填写分类链接');
+                if(validator.passed()){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>

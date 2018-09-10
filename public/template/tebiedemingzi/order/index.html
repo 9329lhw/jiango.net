@@ -1,0 +1,201 @@
+{include file="../public/pageheader.html"}
+<script src="__JS__/utils.js"></script>
+<script src="__JS__/listtable.js"></script>
+<script src="__JS__/Date/laydate.js"></script>
+<div class="form-div">
+    <form action="/tebiedemingzi/order/index" name="searchForm" id="searchForm">
+        <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+        <input type="hidden" name="sort_by" id="sort_by" value='{$sort_by}' />
+        <input type="hidden" name="sort_order" id="sort_order" value="{$sort_order}" />
+        <input type="text" name="nickname" size="15" placeholder="用户昵称" value="{$smarty.get.nickname}"/>
+        <input type="text" name="trade_id" size="20" placeholder="订单号" value="{$smarty.get.trade_id}"/>
+        <input type="text" name="num_iid" size="20" placeholder="商品ID" value="{$smarty.get.num_iid}"/>
+        下单时间：<input class="laydate-icon" id="start_create_time" name="start_create_time" value="{$smarty.get.start_create_time}">~<input class="laydate-icon" id="end_create_time" name="end_create_time" value="{$smarty.get.end_create_time}">
+        <input type="text" name="item_title" placeholder="商品名" value="{$smarty.get.item_title}"/>
+        订单状态 <select name="tb_status">{html_options options=$tb_status_list selected=$smarty.get.tb_status|default:'all'}</select>
+        参奖状态 <select name="prize_status">{html_options options=$prize_status_list selected=$smarty.get.prize_status|default:'all'}</select>
+        订单pid <select name="pid"><option value="">请选择</option>{html_options options=$pid_list selected=$smarty.get.pid|default:''}</select>
+        所属代言人 <select name="boss_agent_uid"><option value="">请选择</option>{html_options options=$boss_list selected=$smarty.get.boss_agent_uid|default:''}</select>
+        <input type="submit" value="{$lang.button_search}" class="button" />
+        <input type="button" id="export" value="导出" class="button" />
+    </form>
+</div>
+<div class="list-div" id="listDiv">
+    <form action="/tebiedemingzi/order/import" method="post" enctype="multipart/form-data" style="float: left;">
+        订单导入:
+        <input name="import_file" type="file" id="import_file">
+        <input style="width:100px;" type="submit" value="导入" id="importButton" class="button">
+    </form>
+    <form action="/tebiedemingzi/order/upload" method="post" enctype="multipart/form-data" style="float: right;">
+        大批量上传(上传后1小时内自动导入):
+        <input name="file" type="file">
+        <input style="width:100px;" type="submit" value="上传" class="button">
+    </form>
+    <table cellpadding="3" cellspacing="1" id="list-table">
+        <tr>
+            <th>订单号</th>
+            <th>所属用户</th>
+            <th>商品ID</th>
+            <th>商品名</th>
+            <th>商品数</th>
+            <th><a href="javascript:listTable.sort('pay_price'); ">实付金额</a>{$sort_pay_price|default:''}</th>
+            <th><a href="javascript:listTable.sort('settle_price'); ">结算金额</a>{$sort_settle_price|default:''}</th>
+            <th>收入比率</th>
+            <th><a href="javascript:listTable.sort('forecast_income'); ">收入金额</a>{$sort_forecast_income|default:''}</th>
+            <th>佣金比率</th>
+            <th>佣金金额</th>
+            <th>补贴比率</th>
+            <th>补贴金额</th>
+            <th>分成比率</th>
+            <th><a href="javascript:listTable.sort('create_time'); ">下单时间</a>{$sort_create_time|default:''}</th>
+            <th>淘宝状态</th>
+            <th>pid</th>
+            <th>奖池状态</th>
+            <th>参奖状态</th>
+            <th><a href="javascript:listTable.sort('jackpot_amount'); ">奖池金额</a>{$sort_jackpot_amount|default:''}</th>
+            <th>奖池时间</th>
+            <th>参奖时间</th>
+        <tr>
+        {foreach from=$list item=item}
+        <tr {if $item.item_num gt 1} class="0"{/if}>
+            <td align="center">{if $item.item_num gt 1}<img src="__IMG__/menu_plus.gif" id="icon_0" width="9" height="9" border="0" style="margin-left:0em" onclick="rowClicked(this)" />{/if}{$item.trade_id}</td>
+            <td align="center"><a href='/tebiedemingzi/user/index?nickname={$item.nickname}&uid={$item.uid}' target="_blank">{$item.nickname}</a></td>
+            <td align="center">{if $item.item_num eq 1}{$item.num_iid}{/if}</td>
+            <td align="center">{if $item.item_num eq 1}{$item.item_title}{/if}</td>
+            <td align="center">{$item.num}</td>
+            <td align="center">{$item.total_pay_price}</td>
+            <td align="center">{$item.total_settle_price}</td>
+            <td align="center">{if $item.item_num eq 1}{$item.income_rate}%{/if}</td>
+            <td align="center">{$item.total_forecast_income}</td>
+            <td align="center">{if $item.item_num eq 1}{$item.commission_rate}%{/if}</td>
+            <td align="center">{$item.total_commission_fee}</td>
+            <td align="center">{if $item.item_num eq 1}{$item.subsidy_rate}%{/if}</td>
+            <td align="center">{$item.total_subsidy_fee}</td>
+            <td align="center">{if $item.item_num eq 1}{$item.divided_rate}%{/if}</td>
+            <td align="center">{$item.create_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td align="center"><span {if $item.status eq 13}style="color:red;"{/if}>{if $item.item_num eq 1}{$tb_status_list[$item.tb_status]}{else}{$tb_status_list[$item.status]}{/if}</span></td>
+            <td align="center">{$item.pid}</td>
+            <td align="center">{$jackpot_status_list[$item.jackpot_status]}</td>
+            <td align="center"><span {if $item.prize_status eq 2}style="color:red;"{/if}>{$prize_status_list[$item.prize_status]}</span></td>
+            <td align="center">{$item.jackpot_amount}</td>
+            <td align="center">{$item.jackpot_date}</td>
+            <td align="center">{$item.prize_date}</td>
+        </tr>
+        {if $item.item_num gt 1}
+        {foreach from=$item.item item=good}
+        <tr class='1' style="display:none;">
+            <td align="center"></td>
+            <td align="center"></td>
+            <td align="center">{$good.num_iid}</td>
+            <td align="center">{$good.item_title}</td>
+            <td align="center">{$good.item_num}</td>
+            <td align="center">{$good.pay_price}</td>
+            <td align="center">{$good.settle_price}</td>
+            <td align="center">{$good.income_rate}%</td>
+            <td align="center">{$good.forecast_income}</td>
+            <td align="center">{$good.commission_rate}%</td>
+            <td align="center">{$good.commission_fee}</td>
+            <td align="center">{$good.subsidy_rate}%</td>
+            <td align="center">{$good.subsidy_fee}</td>
+            <td align="center">{$good.divided_rate}%</td>
+            <td align="center">{$item.create_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+            <td align="center"><span {if $good.tb_status eq 13}style="color:red;"{/if}>{$tb_status_list[$good.tb_status]}</span></td>
+            <td align="center">{$item.pid}</td>
+            <td align="center"></td>
+            <td align="center"></td>
+            <td align="center"></td>
+        </tr>
+        {/foreach}
+        {/if}
+        {foreachelse}
+        <tr><td class="no-records" colspan="20">{$lang.no_records}</td></tr>
+        {/foreach}
+    </table>
+    {if count($list)}
+    <table id="page-table" cellspacing="0" style="border-top: none;">
+        <tr>
+            <td align="right" nowrap="true">
+                <div style="float: left;margin-left: 10px;">付款总额：{$statistic.total_pay_price}，收入总额：{$statistic.total_income}</div>
+                {$page}
+            </td>
+        </tr>
+    </table>
+    {/if}
+</div>
+<script language="JavaScript">
+    
+    !function(){
+	laydate({
+            elem: '#start_create_time'
+        });//绑定元素
+	laydate({
+            elem: '#end_create_time'
+        });//绑定元素
+    }();
+
+    var imgPlus = new Image();
+    imgPlus.src = "__IMG__/menu_plus.gif";
+    /**
+     * 折叠菜单列表
+     */
+    function rowClicked(obj)
+    {
+        // 当前图像
+        img = obj;
+        // 取得上二级tr>td>img对象
+        obj = obj.parentNode.parentNode;
+        // 整个菜单列表表格
+        var tbl = document.getElementById("list-table");
+        // 当前菜单级别
+        var lvl = parseInt(obj.className);
+        // 是否找到元素
+        var fnd = false;
+        var sub_display = img.src.indexOf('menu_minus.gif') > 0 ? 'none' : (Browser.isIE) ? 'block' : 'table-row';
+        // 遍历所有的菜单
+        for (i = 0; i < tbl.rows.length; i++)
+        {
+            var row = tbl.rows[i];
+            console.log(row);
+            if (row == obj)
+            {
+                // 找到当前行
+                fnd = true;
+            } else
+            {
+                if (fnd == true)
+                {
+                    var cur = parseInt(row.className);
+                    var icon = 'icon_' + row.id;
+                    if (cur > lvl)
+                    {
+                        row.style.display = sub_display;
+//                        if (sub_display != 'none')
+//                        {
+//                            var iconimg = document.getElementById(icon);
+//                            iconimg.src = iconimg.src.replace('plus.gif', 'minus.gif');
+//                        }
+                    } else
+                    {
+                        fnd = false;
+                        break;
+                    }
+                }
+            }
+        }
+        for (i = 0; i < obj.cells[0].childNodes.length; i++)
+        {
+            var imgObj = obj.cells[0].childNodes[i];
+            if (imgObj.tagName == "IMG" && imgObj.src != '__IMG__/menu_arrow.gif')
+            {
+                imgObj.src = (imgObj.src == imgPlus.src) ? '__IMG__/menu_minus.gif' : imgPlus.src;
+            }
+        }
+    }
+    
+    $('#export').click(function () {
+        $('#searchForm').attr('action','/tebiedemingzi/order/export');
+        $('#searchForm').submit();
+        $('#searchForm').attr('action','/tebiedemingzi/order/index');
+    });
+</script>
+{include file="../public/pagefooter.html"}

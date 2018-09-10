@@ -1,0 +1,82 @@
+{include file="../public/pageheader.html"}
+<script src="__JS__/utils.js"></script>
+<script src="__JS__/listtable.js"></script>
+<script src="__JS__/Date/laydate.js"></script>
+<div class="form-div">
+    <form action="index" name="searchForm"  onsubmit="return validate()">
+        <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+        <input type="hidden" name="sort_by" id="sort_by" value='{$sort_by}' />
+        <input type="hidden" name="sort_order" id="sort_order" value="{$sort_order}" />
+        <input type="hidden" name="uid" id="uid" value="{$smarty.get.uid}" />
+        <input type="text" name="nickname" size="15" placeholder="用户名" value="{$smarty.get.nickname}"/>
+        注册时间：<input class="laydate-icon" id="start_create_time" name="start_create_time" value="{$smarty.get.start_create_time}">~<input class="laydate-icon" id="end_create_time" name="end_create_time" value="{$smarty.get.end_create_time}">
+        <input type='checkbox' name='first_agent' value='1' {if $smarty.get.first_agent eq 1}checked{/if}/>一级代理
+        <input type='checkbox' name='second_agent' value='1' {if $smarty.get.second_agent eq 1}checked{/if}/>二级代理
+        <input type='checkbox' name='boss_agent' value='1' {if $smarty.get.boss_agent eq 1}checked{/if}/>特殊代理
+        <input type="submit" value="{$lang.button_search}" class="button" />
+    </form>
+    <input type="hidden" name="nickname_old" id="nickname_old" value="{$smarty.get.nickname}" />
+</div>
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>ID</th>
+                <th>头像</th>
+                <th>用户名</th>
+                <th>微信unionid</th>
+                <th>性别</th>
+                <th><a href="javascript:listTable.sort('point'); ">积分</a>{$sort_point|default:''}</th>
+                <th><a href="javascript:listTable.sort('enabled_point'); ">可提积分</a>{$sort_enabled_point|default:''}</th>
+                <th><a href="javascript:listTable.sort('create_time'); ">注册时间</a>{$sort_create_time|default:''}</th>
+                <th><a href="javascript:listTable.sort('first_agent_num'); ">一级代理{$sort_first_agent|default:''}</th>
+                <th><a href="javascript:listTable.sort('second_agent_num'); ">二级代理{$sort_second_agent|default:''}</th>
+                <th><a href="javascript:listTable.sort('boss_agent'); ">代言人{$sort_boss_agent|default:''}</th>
+            <tr>
+                {foreach from=$list item=item}
+            <tr>
+                <td align="center">{$item.uid}</td>
+                <td align="center"><img src="{$item.headimgurl|default:'__IMG__/default-avt.png'}" style='width: 60px;border-radius: 50%;'/></td>
+                <td align="center">{$item.nickname}</td>
+                <td align="center">{$item.unionid}</td>
+                <td align="center">{if $item.sex eq '2'}未知{elseif $item.sex eq '1'}男{elseif $item.sex eq '0'}女{/if}</td>
+                <td align="center"><a href="/tebiedemingzi/user_point_log/index?uid={$item.uid}">{$item.point}</a></td>
+                <td align="center">{$item.enabled_point}</td>
+                <td align="center">{$item.create_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                <td align="center"><img src="__IMG__/{if $item.first_agent_num gt 0}yes{else}no{/if}.gif" /></td>
+                <td align="center"><img src="__IMG__/{if $item.second_agent_num gt 0}yes{else}no{/if}.gif" /></td>
+                <td align="center"><img src="__IMG__/{if $item.boss_agent}yes{else}no{/if}.gif" onclick="if(confirm('确认操作？'))listTable.toggle(this, 'edit_boss_agent', {$item.uid})"/></td>
+            </tr>
+            {foreachelse}
+            <tr><td class="no-records" colspan="20">{$lang.no_records}</td></tr>
+            {/foreach}
+        </table>
+        {if count($list)}
+        <table id="page-table" cellspacing="0" style="border-top: none;">
+            <tr>
+                <td align="right" nowrap="true">
+                    {$page}
+                </td>
+            </tr>
+        </table>
+        {/if}
+    </div>
+<script language="JavaScript">
+    
+    !function(){
+	laydate({
+            elem: '#start_create_time'
+        });//绑定元素
+	laydate({
+            elem: '#end_create_time'
+        });//绑定元素
+    }();
+    
+    function validate()
+    {
+        if($('#nickname_old').val() != $('#nickname').val()){
+            $('#uid').val('');
+        }
+        return true;
+    }
+</script>
+{include file="../public/pagefooter.html"}

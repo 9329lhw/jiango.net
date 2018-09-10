@@ -1,0 +1,7 @@
+<h1>
+    {if $action_link && checkPriv($action_link.href)}
+    <span class="action-span"><a href="{$action_link.href}">{$action_link.text}</a></span>
+    {/if}
+    <span class="action-span1"><a href="__MODULE__/Index/main">{$lang.cp_home}</a> </span><span id="search_id" class="action-span1">{if $ur_here} - {$ur_here} {/if}</span>
+    <div style="clear:both"></div>
+</h1>

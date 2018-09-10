@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <style>
+            .title{
+                margin: 1em 0 .5em .8em;
+                padding: 5px 0;
+                font-weight: bold;
+                font-size: 1rem;
+                border-bottom: 1px solid #998b8b;
+            }
+            /*input[type=button],input[type=submit] {
+                background-color: white;
+                border: 1px solid gray;
+                color: black;
+                padding: 2px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                border-radius: 5px;
+            }*/
+        </style>
+    </head>
+    <body>
+        <div style='padding:1em 2em;' class='form'>
+            <p class="title">全局设置</p>
+            <form action='/admin/prize/savePrizeRate' method='post' name="theForm">
+                <table cellspacing="1" cellpadding="3">
+                    <tr>
+                        <td class="label">
+                            奖池占比
+                        </td>
+                        <td>
+                            <input min='0' max="100" type='number' name='prize_rate' id="prize_rate" value='{$prize_rate}' style="width:50px;text-align: right;;"/>%<input type='submit' value='提交' style="margin-left: 5px;"/>
+                        </td>
+                        <td class="label_left">
+                            1元 = 100积分
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <p class="title">本期抽奖设定</p>
+            <table cellspacing="1" cellpadding="3" style='float: left;margin-right: 150px;'>
+                <tr>
+                    <td class="label_left">本期奖池时间：</td>
+                    <td>{$prize.prize_day} 00:00 ~ {$prize.prize_day} 23:59</td>
+                </tr>
+                <tr>
+                    <td class="label_left">本期开奖时间：</td>
+                    <td>{$smarty.now|date_format:"%Y-%m-%d"} 15:00</td>
+                </tr>
+                <tr>
+                    <td class="label_left">本期佣金额：</td>
+                    <td>{$prize.income_amount}</td>
+                </tr>
+                <tr>
+                    <td class="label_left">真实奖池积分：</td>
+                    <td>{$prize.actual_jackpot} （销售额*奖池占比*100）</td>
+                </tr>
+                <tr>
+                    <td class="label_left">本期奖池积分：</td>
+                    <td><span id="jackpot">{$prize.jackpot}</span></td>
+                </tr>
+                <tr>
+                    <td class="label_left">本期中奖标识：</td>
+                    <td>
+                        {if $prize.status}
+                        {$prize.winning_data}
+                        {else}
+                        <form action='/admin/prize/updatePrize' method='post' name="theForm">
+                            <input type="hidden" name='id' id='id' value='{$prize.id}'/>
+                            <input type="hidden" name='act' value="winning_data"/>
+                            <input type="text" name='value' id="winning_data" value="{$prize.winning_data}"/>
+                            <input type='submit' value='确认' style="margin-left: 5px;"/>
+                        </form>
+                        {/if}
+                    </td>
+                </tr>
+            </table>
+            <table style='border: 1px dashed gray;padding: 10px 200px 10px 10px;margin: 1em;'>
+                <tr><td class="label_left">中奖总人数：</td><td id='actual_winning_num'>{$prize.actual_winning_num}</td><td></td></tr>
+                <tr><td class="label_left">平均获得积分：</td><td id='average_point'>{($prize.jackpot/$prize.actual_winning_num)|floor} 积分</td><td></td></tr>
+                <tr><td class="label_left">直接中奖：</td><td>{$prize.order_winning_num}</td><td></td></tr>
+                <tr><td class="label_left">上级好友：</td><td>{$prize.second_agent_num}</td><td></td></tr>
+                <tr><td class="label_left">上上级好友：</td><td>{$prize.first_agent_num}</td><td></td></tr>
+            </table>
+            <p class="title">虚拟数据设置</p>
+            <table cellspacing="1" cellpadding="3">
+                <tr>
+                    <td class="label_left">
+                        增加虚拟中奖人数：
+                    </td>
+                    <td>
+                        <span id="winning_num_increment">{$prize.winning_num_increment}</span>
+                        {if $prize.status eq 0}
+                        <input type="number" id="winning_num_increment_intput" value="{$prize.winning_num_increment}" style="display:none;" onchange="edit_winning_num_increment()"/>
+                        <input type='button' value='修改' style="margin-left: 10px;" onclick="update_winning_num_increment(this)"/>
+                        <input type='button' value='取消' style="margin-left: 10px;display:none;" onclick="cancel_edit_winning_num_increment(this)"/>
+                        {/if}
+                    </td>
+                </tr>
+            </table>
+            <table style='border: 1px dashed gray;padding: 10px 200px 10px 10px;margin: 1em;'>
+                <tr><td class="label_left">中奖总人数：</td><td id='set_winning_num'>{$prize.winning_num}</td><td></td></tr>
+                <tr><td class="label_left">真实人数：</td><td>{$prize.actual_winning_num}</td><td><span id='set_true_winning_total'>{(($prize.jackpot/$prize.winning_num)|floor)*$prize.actual_winning_num}</span> 积分</td></tr>
+                <tr><td class="label_left">虚假人数：</td><td id='set_virtual_num'>{$prize.winning_num_increment}</td><td><span id='set_virtual_winning_total'>{(($prize.jackpot/$prize.winning_num)|floor)*$prize.winning_num_increment}</span> 积分</td></tr>
+                <tr><td class="label_left">平均获得积分：</td><td id='set_point'>{($prize.jackpot/$prize.winning_num)|floor} 积分</td><td></td></tr>
+            </table>
+            <p class="title">公布开奖情况</p>
+            {if $prize.status}
+            <a href='/admin/prize/winners?day={$prize.prize_day}' style='margin: 12px;'>查看本期中奖名单</a>
+            {else}
+            <form action='/admin/prize/publish' onsubmit="if(!confirm('确定公布本期开奖情况？'))return false;">
+                <input type='submit' value='公布本期开奖情况' style='margin: 12px;' />
+            </form>
+            {/if}
+            <p class="title">新一期抽奖设定</p>
+            <table cellspacing="1" cellpadding="3" style='float: left;margin-right: 150px;'>
+                <tr>
+                    <td class="label_left">新一期奖池时间：</td>
+                    <td>{$next_prize.prize_day} 00:00 ~ {$next_prize.prize_day} 23:59</td>
+                </tr>
+                <tr>
+                    <td class="label_left">新一期开奖时间：</td>
+                    <td>{$smarty.now|date_format:"%Y-%m-%d"} 15:00</td>
+                </tr>
+                <tr>
+                    <td class="label_left">新一期佣金额：</td>
+                    <td>{$next_prize.income_amount}</td>
+                </tr>
+                <tr>
+                    <td class="label_left">新一期真实奖池积分：</td>
+                    <td>{$next_prize.actual_jackpot} （销售额*奖池占比*100）</td>
+                </tr>
+                <tr>
+                    <td class="label_left">新一期奖池积分：</td>
+                    <td><span id="next_jackpot">{$next_prize.jackpot}</span>
+                        <input type="text" id="next_jackpot_intput" value="{$next_prize.jackpot}" style="display:none;"/>
+                        <input type='button' value='修改' data-id="{$next_prize.id}" style="margin-left: 10px;" onclick="update_jackot(this)"/>
+                        <input type='button' value='取消' style="margin-left: 10px;display:none;" onclick="cancel_edit_jackot(this)"/></td>
+                </tr>
+            </table>
+        </div>
+        <script type="text/javascript" src="__JS__/utils.js"></script>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script>
+            var jackpot = {$prize.jackpot};
+            var winning_num = {$prize.actual_winning_num};
+            var winning_num_increment = {$prize.winning_num_increment};
+            function update_jackot(obj){
+                if($(obj).val() == '修改'){
+                    $('#next_jackpot_intput').val($('#next_jackpot').html());
+                    $('#next_jackpot').hide();
+                    $('#next_jackpot_intput').show();
+                    $(obj).val('提交');
+                    $(obj).next().show();
+                }else{
+                    if($('#next_jackpot').html() != $('#next_jackpot_intput').val()){
+                        $.ajax({
+                            async: false,
+                            url: '/admin/prize/ajaxUpdatePrize',
+                            type: 'POST',
+                            dataType:"json",
+                            data: 'id=' + $(obj).attr('data-id') +'&act=jackpot&value='+$('#next_jackpot_intput').val() ,
+                            success: function (res) {
+                                console.log(res);
+                                if(res.error){
+                                    alert(res.message);
+                                }else{
+                                    $('#next_jackpot').html($('#next_jackpot_intput').val());
+                                    $('#next_jackpot').show();
+                                    $('#next_jackpot_intput').hide();
+                                    $(obj).val('修改');
+                                    $(obj).next().hide();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            function edit_jackot(){
+                jackpot = parseInt($('#jackpot_intput').val());
+                calculate();
+            }
+            function cancel_edit_jackot(obj){
+                $(obj).hide();
+                $('#next_jackpot').show();
+                $('#next_jackpot_intput').hide();
+                $(obj).prev().val('修改');
+            }
+            
+            function update_winning_num_increment(obj){
+                if($(obj).val() == '修改'){
+                    $('#winning_num_increment_intput').val($('#winning_num_increment').html());
+                    $('#winning_num_increment').hide();
+                    $('#winning_num_increment_intput').show();
+                    $(obj).val('提交');
+                    $(obj).next().show();
+                }else{
+                    if($('#winning_num_increment').html() != $('#winning_num_increment_intput').val()){
+                        $.ajax({
+                            async: false,
+                            url: '/admin/prize/ajaxUpdatePrize',
+                            type: 'POST',
+                            dataType:"json",
+                            data: 'id=' + $('#id').val() +'&act=winning_num_increment&value='+$('#winning_num_increment_intput').val() ,
+                            success: function (res) {
+                                if(res.error){
+                                    alert(res.message);
+                                }else{
+                                    $('#winning_num_increment').html($('#winning_num_increment_intput').val());
+                                    $('#winning_num_increment').show();
+                                    $('#winning_num_increment_intput').hide();
+                                    $(obj).val('修改');
+                                    $(obj).next().hide();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            function edit_winning_num_increment(){
+                winning_num_increment = parseInt($('#winning_num_increment_intput').val());
+                calculate();
+            }
+            function cancel_edit_winning_num_increment(obj){
+                $(obj).hide();
+                winning_num_increment = parseInt($('#winning_num_increment').html());
+                $('#winning_num_increment').show();
+                $('#winning_num_increment_intput').hide();
+                $(obj).prev().val('修改');
+                calculate();
+            }
+            
+            function calculate(){
+                $('#average_point').html(Math.floor(jackpot/winning_num)+' 积分');
+                var point = Math.floor(jackpot/(winning_num+winning_num_increment));
+                var winning_total = point*winning_num;
+                var virtual_winning_total = point*winning_num_increment;
+                $('#set_winning_num').html(winning_num+winning_num_increment);
+                $('#set_true_winning_total').html(point*winning_num);
+                $('#set_virtual_num').html(winning_num_increment);
+                $('#set_virtual_winning_total').html(point*winning_num_increment);
+                $('#set_point').html(point+' 积分');
+            }
+        </script>
+    </body>
+</html>

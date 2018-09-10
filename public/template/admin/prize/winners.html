@@ -1,0 +1,30 @@
+{include file="../public/pageheader.html"}
+<script src="__JS__/utils.js"></script>
+<script src="__JS__/listtable.js"></script>
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>奖池日期</th>
+                <th>获奖用户</th>
+                <th>中奖订单</th>
+                <th>订单用户</th>
+                <th>积分</th>
+                <th>类型</th>
+                <th>状态</th>
+            <tr>
+                {foreach from=$list item=item}
+            <tr>
+                <td align="center">{$item.day}</td>
+                <td align="center">{$item.user_name}</td>
+                <td align="center">{$item.trade_id}</td>
+                <td align="center">{$item.nickname}</td>
+                <td align="center">{$item.point}</td>
+                <td align="center">{if $item.type eq 'order'}直接中奖{elseif $item.type eq 'second_agent'}下级好友{elseif $item.type eq 'first_agent'}下下级好友{elseif $item.type eq 'virtual'}虚拟{/if}</td>
+                <td align="center">{if $item.status eq 1}有效{elseif $item.type eq 0}无效{/if}</td>
+            </tr>
+            {foreachelse}
+            <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+            {/foreach}
+        </table>
+    </div>
+{include file="../public/pagefooter.html"}

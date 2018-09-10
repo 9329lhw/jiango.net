@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <script src="__JS__/utils.js"></script>
+    </head>
+    <body>
+        <div class="list-div" id="listDiv">
+            <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+                <tr>
+                    <th align="center">id</th>
+                    <th align="center">图片</th>
+                    <th align="center">位置</th>
+                    <th align="center">名称</th>
+                    <th align="center">链接</th>
+                    <th align="center">描述</th>
+                    <th align="center">添加时间</th>
+                    <th align="center">排序</th>
+                    <th align="center">状态</th>
+                    <th>{$lang.handler}</th>
+                </tr>
+                {foreach from=$adlist item=item}
+                <tr align="left">
+                    <td align="center">{$item.id}</td>
+                    <td align="center"><img src="__UPLOAD__{$item.extimg}" height="25px" width="25px"></td>
+                    <td align="center">{if $item.board_id ==1}首页{else}搜索页{/if}</td>
+                    <td align="center">{$item.name}</td>
+                    <td align="center">{$item.url}</td>
+                    <td align="center">{$item.desc}</td>
+                    <td align="center">{$item.create_time}</td>
+                    <td align="center">{$item.ordid}</td>
+                    <td align="center">{$item.status}</td>
+                    <td align="center" class="nowrap" valign="top">
+                        {if checkPriv('/admin/permission/editAction')}<a href='/admin/ad/editAd/id/{$item.id}'>编辑</a>{/if}
+                        {if checkPriv('/admin/permission/deleteAction')}<a href='/admin/ad/deleteAd/id/{$item.id}'>删除</a>{/if}
+                    </td>
+                </tr>
+                {foreachelse}
+                <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+                {/foreach}
+            </table>
+            {if $page}
+            <table id="page-table" cellspacing="0">
+                <tr>
+                    <td align="right" nowrap="true">
+                        {$page}
+                    </td>
+                </tr>
+            </table>
+            {/if}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='saveCommission' method='post' name="theForm">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <tr><td class="label">
+                        一级</td><td><input min='0' type='number' name='first_agent_commission' id="first_agent_commission" value='{$commissions.first_agent_commission}' /> 积分</td>
+                </tr>
+                <tr><td class="label">
+                        二级
+                    </td><td><input min='0' type='number' name='second_agent_commission' id="second_agent_commission" value='{$commissions.second_agent_commission}' /> 积分</td>
+                </tr>
+                <tr><td class="label">
+                        特殊
+                    </td><td><input min='0' type='number' name='boss_agent_commission' name='boss_agent_commission' value='{$commissions.boss_agent_commission}'> 积分</td>
+                </tr>
+                <tr><td class="label">
+                    </td><td><input min='0' type='number' name='boss_agent_order_commission' name='boss_agent_order_commission' value='{$commissions.boss_agent_order_commission}'> %佣金（订单成功后可获得我们佣金的百分比）</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/utils.js"></script>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+    </body>
+</html>

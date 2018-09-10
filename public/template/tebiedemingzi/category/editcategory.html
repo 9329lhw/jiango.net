@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+    </head>
+    <body>
+        <form action='' method='post' name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+            <table cellspacing="1" cellpadding="3">
+                {token()}
+                <input type='hidden' name='id' id="id" value='{$cateinfo.id}' />
+                <tr><td class="label">
+                        名称
+                    </td><td><input type='text' name='name' id="code" value='{$cateinfo.name}' /></td>
+                </tr>
+                <tr><td class="label">
+                        显示位置
+                    </td>
+                    <td>
+                        <select name="board_id">
+                            {html_options options=$cate_position selected=$cateinfo.board_id|default:'请选择位置'}
+                        </select>
+                    </td>
+                </tr>
+                <tr><td class="label"></td>
+                    <td>
+                        <select name="type">
+                            {html_options options=$cate_type selected=$cateinfo.type|default:'请选择跳转位置'}
+                        </select>
+                    </td>
+                </tr>
+                <tr><td class="label">url</td>
+                    <td><input type='text' name='url' value='{$cateinfo.url}'></td>
+                </tr>
+                <tr><td class="label">分类标签</td>
+                    <td><input type='text' name='tag' value='{$cateinfo.tag}'>*(1女装，2男装，3内衣，4美妆，5配饰，6鞋品，7箱包，8儿童，9母婴，10居家，11美食，12数码，13家电，14其他，15车品，16文体)</td>
+                </tr>
+                <tbody class="param" style="display: {if $adinfo.type neq 5}none{/if};">
+                <tr><td class="label">
+                        跳转参数
+                    </td><td><input type='text' name='param' value='{$adinfo.param}'>*(参数加密，需找技术提供)</td>
+                </tr>
+                </tbody>
+                <tr><td class="label"> </td>
+                    <td><input type='text' name='ordid' value='{$cateinfo.ordid}'></td>
+                </tr>
+                <tr><td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' name='status' value='1' {if $cateinfo.status eq 1}checked="true"{/if}/>是
+                               <input type='radio' name='status' value='0' {if $cateinfo.status eq 0}checked="true"{/if}/>否
+                    </td>
+                </tr>
+                <tr><td class="label"></td>
+                    <td>
+                        <img src="__UPLOAD__{$cateinfo.extimg}" height="60px" width="60px"><br/>
+                        <input type='file' name='extimg' value='{$cateinfo.extimg}'>
+                    </td>
+                </tr>
+                
+                <tr><td class="label">
+                        描述
+                    </td>
+                    <td>
+                        <input type='text' name='desc' value='{$cateinfo.desc}'>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        <input type='submit' value='提交' />
+                        <input type='button' value='返回' onclick="history.back(-1);" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script type="text/javascript" src="__JS__/validator.js"></script>
+        <script type="text/javascript">
+                            $("select[name='type']").change(function () {
+                                var type = $("select[name='type']").val();
+                                if(type==1){
+                                    $("input[name=url]").after("*(链接形如：/category/getList)");
+                                    $("input[name=tag]").after("*(参数形式如：)");
+                                }else if(type==2){
+                                    $("input[name=url]").after("*(链接形如：/category/getGoodsList)");
+                                    $("input[name=tag]").after("*(参数形式如：)");
+                                }else if(type==3){
+                                    $("input[name=url]").after("*(链接形如：/category/getList)");
+                                    $("input[name=tag]").after("*(参数形式如：)");
+                                }else if(type==4){
+                                    $("input[name=url]").after("*(链接形如：/category/getList)");
+                                    $("input[name=tag]").after("*(参数形式如：)");
+                                }else if(type==5){
+                                    $("input[name=url]").after("*(链接形如：/category/getList)");
+                                    $(".param").show();
+                                }
+                                
+                            });
+                            function validate()
+                            {
+                                validator = new Validator("theForm");
+                                validator.required("name", '请填写分类标题');
+                                validator.required("url", '请填写分类链接');
+                                if (validator.passed()) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+        </script>
+    </body>
+</html>

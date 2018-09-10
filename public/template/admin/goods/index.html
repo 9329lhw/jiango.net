@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="../public/pageheader.html"}
+        <script src="__JS__/utils.js"></script>
+    </head>
+    <body>
+        <div class="list-div" id="listDiv">
+            <form action="/admin/excel/goodsImport" method="post" enctype="multipart/form-data" style="float: right;">
+                商品导入:
+                <input name="import_file" type="file" id="import_file">
+                <input style="width:100px;" type="submit" value="导入" id="importButton" class="button">
+            </form>
+            <table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+                <tr>
+                    <th width="5%" align="center">id</th>
+                    <th width="5%" align="center">图片</th>
+                    <th width="20%" align="center">商品名称</th>
+                    <th width="10%" align="center">商品价格</th>
+                    <th width="10%" align="center">商品销量</th>
+                    <th width="10%" align="center">收入比</th>
+                    <th width="10%" align="center">佣金</th>
+                    <th width="10%" align="center">开始时间</th>
+                    <th width="10%" align="center">结束时间</th>
+                    <th width="10%">{$lang.handler}</th>
+                </tr>
+                {foreach from=$goodslist item=item}
+                <tr align="left">
+                    <td align="center">{$item.id}</td>
+                    <td align="center"><a href="{$item.tbk_url}"><img src="{$item.pic_url}" height="35px" width="35px"></a></td>
+                    <td align="center">{$item.title}</td>
+                    <td align="center">{$item.price}</td>
+                    <td align="center">{$item.sale_num}</td>
+                    <td align="center">{$item.commission_rate}</td>
+                    <td align="center">{$item.commission}</td>
+                    <td align="center">{$item.coupon_start_time}</td>
+                    <td align="center">{$item.coupon_end_time}</td>
+                    <td align="center" class="nowrap" valign="top">
+                        {if checkPriv('/admin/permission/editAction')}<a href='/admin/goods/detail/id/{$item.id}'>详情</a>{/if}
+                    </td>
+                </tr>
+                {foreachelse}
+                <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+                {/foreach}
+            </table>
+            {if $page}
+            <table id="page-table" cellspacing="0">
+                <tr>
+                    <td align="right" nowrap="true">
+                        {$page}
+                    </td>
+                </tr>
+            </table>
+            {/if}
+        </div>
+        <script>
+            $(function () {
+                $('#importButton').bind('click',function(){
+                    var val = $("#import_file").val();
+                    if(val == ''){
+                        alert('请选择你要导入的商品');
+                        return false;
+                    }
+                });
+                
+            });
+        </script>
+    </body>
+</html>
